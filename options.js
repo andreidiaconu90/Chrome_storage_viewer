@@ -1,16 +1,59 @@
 // Saves options to chrome.storage
 function save_options() {
-  var color = document.getElementById('color').value;
-  var likesColor = document.getElementById('like').checked;
-  chrome.storage.sync.set({
-    favoriteColor: color,
-    likesColor: likesColor
-  }, function() {
-    // Update status to let user know options were saved.
-    var status = document.getElementById('status');
-    status.textContent = 'Options saved.';
-    setTimeout(function() {
-      status.textContent = '';
-    }, 750);
-  });
+  var localStorageKeys = [];
+  var sessionStorageKeys = [];
+    document.getElementById('localStorage').querySelectorAll('*[id^="Key"]').forEach(function(element){
+      localStorageKeys.push(element.value);
+    });
+    document.getElementById('sessionStorage').querySelectorAll('*[id^="Key"]').forEach(function(element){
+      sessionStorageKeys.push(element.value);
+    });
+    chrome.storage.local.set({
+        'localStorageKeys': localStorageKeys,
+        'sessionStorageKeys': sessionStorageKeys
+    }, function() {
+        // Update status to let user know options were saved.
+        var status = document.getElementById('status');
+        status.textContent = 'Options saved.';
+        setTimeout(function() {
+            status.textContent = '';
+        }, 750);
+    });
 }
+function restore_options() {
+      chrome.storage.local.get('localStorageKeys',function(result){
+        console.log(result.localStorageKeys);
+
+        result.localStorageKeys.forEach(function(value){
+          document.getElementById('localStorage').querySelectorAll('input:text[value=""]')[0].Value = value;
+        });
+      });
+      chrome.storage.local.get('sessionStorageKeys',function(result){
+        result.forEach(function(value){
+          document.getElementById('sessionStorage').querySelectorAll('input:text[value=""]')[0].Value = value;
+        });
+      });
+}
+
+function show_saved_options() {
+    var stuff = "";
+    chrome.storage.local.get(null, function(items) {
+        for (key in items) {
+            console.log(key);
+        }
+    });
+}
+
+
+
+function clear_options() {
+    chrome.storage.local.clear();
+}
+
+document.addEventListener('DOMContentLoaded', restore_options);
+document.getElementById('save').addEventListener('click',
+    save_options);
+document.getElementById('clear').addEventListener('click',
+    clear_options);
+document.getElementById('show').addEventListener('click',
+    restore_options);
