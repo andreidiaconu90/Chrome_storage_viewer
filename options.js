@@ -1,12 +1,12 @@
 // Saves options to chrome.storage
 function save_options() {
-  var localStorageKeys = [];
-  var sessionStorageKeys = [];
-    document.getElementById('localStorage').querySelectorAll('*[id^="Key"]').forEach(function(element){
-      localStorageKeys.push(element.value);
+    var localStorageKeys = [];
+    var sessionStorageKeys = [];
+    document.getElementById('localStorage').querySelectorAll('*[id^="localStorage_Key"]').forEach(function(element) {
+        localStorageKeys.push(element.value);
     });
-    document.getElementById('sessionStorage').querySelectorAll('*[id^="Key"]').forEach(function(element){
-      sessionStorageKeys.push(element.value);
+    document.getElementById('sessionStorage').querySelectorAll('*[id^="sessionStorage_Key"]').forEach(function(element) {
+        sessionStorageKeys.push(element.value);
     });
     chrome.storage.local.set({
         'localStorageKeys': localStorageKeys,
@@ -20,19 +20,20 @@ function save_options() {
         }, 750);
     });
 }
-function restore_options() {
-      chrome.storage.local.get('localStorageKeys',function(result){
-        console.log(result.localStorageKeys);
 
-        result.localStorageKeys.forEach(function(value){
-          document.getElementById('localStorage').querySelectorAll('input:text[value=""]')[0].Value = value;
+function restore_options() {
+    chrome.storage.local.get('localStorageKeys', function(result) {
+        $.each(result.localStorageKeys, function(index, value) {
+            var inputFields = $('#localStorage').find("input");
+            $.each(inputFields, function(index, input) {
+                if ($(input).val() == "") {
+                    $(input).val(value);
+                    //skip iteration
+                    return false;
+                }
+            });
         });
-      });
-      chrome.storage.local.get('sessionStorageKeys',function(result){
-        result.forEach(function(value){
-          document.getElementById('sessionStorage').querySelectorAll('input:text[value=""]')[0].Value = value;
-        });
-      });
+    });
 }
 
 function show_saved_options() {
@@ -48,6 +49,7 @@ function show_saved_options() {
 
 function clear_options() {
     chrome.storage.local.clear();
+
 }
 
 document.addEventListener('DOMContentLoaded', restore_options);
