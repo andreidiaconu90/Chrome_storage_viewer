@@ -21,27 +21,12 @@ function save_options() {
     });
 }
 
-// function restore_options() {
-//     chrome.storage.local.get('localStorageKeys', function(result) {
-//         $.each(result.localStorageKeys, function(index, value) {
-//             var inputFields = $('#localStorage').find("input");
-//             $.each(inputFields, function(index, input) {
-//                 if ($(input).val() == "") {
-//                     $(input).val(value);
-//                     //skip iteration
-//                     return false;
-//                 }
-//             });
-//         });
-//     });
-// }
 function restore_options() {
     chrome.storage.local.get(['localStorageKeys','sessionStorageKeys'], function(result) {
         fillStorageKeyInputs(result.localStorageKeys, "localStorage");
           fillStorageKeyInputs(result.sessionStorageKeys, "sessionStorage");
     });
 }
-
 
 function fillStorageKeyInputs(storageKeys, tableToFill) {
     $.each(storageKeys, function(index, value) {
