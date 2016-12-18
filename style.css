@@ -1,6 +1,15 @@
-#localStorage{
-  float:left;
+#localStorage {
+    float: left;
 }
-#sessionStorage{
-    display:inline;
+
+#sessionStorage {
+    display: inline;
+}
+
+#notification {
+    clear: both;
+    position: relative;
+    z-index: 10;
+    height: 3em;
+    margin-top: -3em;
 }
