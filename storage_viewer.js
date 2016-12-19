@@ -47,7 +47,8 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
                 //     'box-shadow: 0 0 15px #00214B}">' + JSON.stringify(returnedKeys) + '</div>';
                 var html = '<div id="footerAndrei"' +
                     ' style="position: fixed;' +
-                    'top: 0;width: 30%;' +
+                    'top: 0;width: 25%;' +
+                    'right:0;'+
                     'line-height: 2;' +
                     'color:white;'+
                     'text-align: center;' +
