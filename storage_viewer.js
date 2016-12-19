@@ -21,6 +21,9 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
                 });
                 $.each(keysToSearch, function(index, key) {
                   returnedKeys[key] = localStorage.getItem(key);
+                  var sessionState = localStorage.getItem("sessionState");
+                  var parsedSessionState = JSON.parse(sessionState);
+                  returnedKeys["sessionId"] = parsedSessionState["SessionId"];
                   // var indexOfKey = jQuery.inArray(key, msg.localStorageKeys);
                   // if(indexOfKey !== -1){
                   //   var keyValue = returnedKeys[index]
