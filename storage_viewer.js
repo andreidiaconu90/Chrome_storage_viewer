@@ -52,9 +52,16 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
                 //     'font-weight: bold;' +
                 //     'text-shadow: 0 1px 0 #84BAFF;' +
                 //     'box-shadow: 0 0 15px #00214B}">' + JSON.stringify(returnedKeys) + '</div>';
+                var htmlRows = [];
+                $.each(returnedKeys,function(index,key){
+                    var keyHtml="<p>" + index.replace(/\"/g, "") +"</p>";
+                    var valueHtml = "<p>" + key.replace(/\"/g, "") +"</p>";
+                    htmlRows.push("<tr><td style='padding: 0 20px 0 5px;'>"+keyHtml+"</td><td style='padding: 0 20px 0 5px;'>"+valueHtml+"</td></tr>");
+                });
+
                 var html = '<div id="extensionOverlay"' +
                     ' style="position: fixed;' +
-                    'top: 0;width: 25%;' +
+                    'top: 0;' +
                     'right:0;'+
                     'line-height: 2;' +
                     'color:white;'+
@@ -62,7 +69,7 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
                     'font-size: 15px;' +
                     'font-family: sans-serif;' +
                     'font-weight: bold;' +
-                    'background: rgba(54, 25, 25, .5);">' + JSON.stringify(returnedKeys) + '</div>';
+                    'background: rgba(54, 25, 25, .5);"><table><tr><th style="padding: 0 20px 0 5px;">Key</th><th style="padding: 0 20px 0 5px;">Value</th></tr>'+ htmlRows +'</table></div>';
                     chrome.storage.local.set({
                         'extensionState': "open",
                     });
