@@ -8,41 +8,52 @@
 </head>
 
 <body>
-    <table id="localStorage">
-        <tr>
-            <th>Local storage</th>
-        </tr>
-        <tr>
-            <td>
-                <label>Key</label>
-                <input id="localStorage_Key1" type="text" value=""/>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Key</label>
-                <input id="localStorage_Key2" type="text" value=""/>
-            </td>
-        </tr>
-    </table>
-
-    <table id="sessionStorage">
-        <tr>
-            <th>Session storage</th>
-        </tr>
-        <tr>
-            <td>
-              <label>Key</label>
-              <input id="sessionStorage_Key1" type="text" value=""/>
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <label>Key</label>
-              <input id="sessionStorage_Key2" type="text" value=""/>
-            </td>
-        </tr>
-    </table>
+<table>
+  <tr>
+    <th>
+      Key
+    </th>
+    <th>
+      Is Json
+    </th>
+    <th>
+      Value Path
+    </th>
+  </tr>
+  <tr>
+    <td>
+        <input id="localStorage_Key1" type="text" value=""/>
+    </td>
+    <td style="text-align:center">
+      <input id="isJson_1" type="checkbox" style="text-align:center"/>
+    </td>
+    <td>
+        <input id="localStorage_ValuePath1" type="text" value=""/>
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <input id="localStorage_Key2" type="text" value=""/>
+    </td>
+    <td style="text-align:center">
+      <input id="isJson_2" type="checkbox" style="text-align:center"/>
+    </td>
+    <td>
+        <input id="localStorage_ValuePath3" type="text" value=""/>
+    </td>
+  </tr>
+  <tr>
+    <td style="text-align:center">
+        <input id="localStorage_Key3" type="text" value=""/>
+    </td>
+    <td style="text-align:center">
+      <input id="isJson_3" type="checkbox" style="text-align:center"/>
+    </td>
+    <td>
+        <input id="localStorage_ValuePath3" type="text" value=""/>
+    </td>
+  </tr>
+</table>
 
     <div id="status"></div>
     <button id="save">Save</button>

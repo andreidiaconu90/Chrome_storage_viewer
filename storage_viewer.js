@@ -74,7 +74,4 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
                         'extensionState': "open",
                     });
                 $($.parseHTML(html)).appendTo('body');
-                // if (msg.action == 'SendIt') {
-                //     alert(window.localStorage.getItem('se:fkey'));
-                // }
             });
