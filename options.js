@@ -22,9 +22,9 @@ function save_options() {
 }
 
 function restore_options() {
-    chrome.storage.local.get(['localStorageKeys','sessionStorageKeys'], function(result) {
+    chrome.storage.local.get(['localStorageKeys', 'sessionStorageKeys'], function(result) {
         fillStorageKeyInputs(result.localStorageKeys, "localStorage");
-          fillStorageKeyInputs(result.sessionStorageKeys, "sessionStorage");
+        fillStorageKeyInputs(result.sessionStorageKeys, "sessionStorage");
     });
 }
 
@@ -50,11 +50,24 @@ function show_saved_options() {
     });
 }
 
+function changeHandler(e) {
+    if (e.target.checked) {
+        $(e.target).parent().parent().find('input[id^="localStorage_ValuePath"]').parent().show();
+    } else {
+        $(e.target).parent().parent().find('input[id^="localStorage_ValuePath"]').parent().hide();
+    }
+}
 
 
 function clear_options() {
     chrome.storage.local.clear();
     $("input").val("");
+}
+
+function showValuePathHeader(){
+  if($("input[id^='localStorage_ValuePath']")){
+    
+  }
 }
 
 document.addEventListener('DOMContentLoaded', restore_options);
@@ -64,3 +77,10 @@ document.getElementById('clear').addEventListener('click',
     clear_options);
 document.getElementById('show').addEventListener('click',
     restore_options);
+document.addEventListener('DOMContentLoaded', function() {
+    var checkboxes = document.querySelectorAll('.isJson');
+    for (var i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].addEventListener('change', changeHandler);
+    }
+});
+document.addEventListener('DOMContentLoaded',showValuePathHeader);
