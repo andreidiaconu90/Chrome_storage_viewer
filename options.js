@@ -2,35 +2,41 @@
 function save_options() {
     var localStorageKeys = [];
     var sessionStorageKeys = [];
-    document.getElementById('localStorage').querySelectorAll('*[id^="localStorage_Key"]').forEach(function(element) {
-        localStorageKeys.push(element.value);
-    });
-    document.getElementById('sessionStorage').querySelectorAll('*[id^="sessionStorage_Key"]').forEach(function(element) {
-        sessionStorageKeys.push(element.value);
+    var keysToTrack = [];
+    document.getElementById('keysForm').querySelectorAll('.keysToSave').forEach(function(row){
+      if($(row).find('.key').val())
+       {
+        var object = {};
+        object = {
+          _key : $(row).find('.key').val(),
+          _isJson : $(row).find('.isJson').is(":checked"),
+          _value : $(row).find('.value').val()
+        };
+        keysToTrack.push(object);
+      }
     });
     chrome.storage.local.set({
-        'localStorageKeys': localStorageKeys,
-        'sessionStorageKeys': sessionStorageKeys
+        'keysToTrack': keysToTrack,
     }, function() {
         // Update status to let user know options were saved.
         var status = document.getElementById('status');
         status.textContent = 'Options saved';
         setTimeout(function() {
             status.textContent = '';
-        }, 750);
+        }, 1000);
     });
 }
 
 function restore_options() {
     chrome.storage.local.get(['localStorageKeys', 'sessionStorageKeys'], function(result) {
-        fillStorageKeyInputs(result.localStorageKeys, "localStorage");
+        fillStorageKeyInputs(result.localStorageKeys, "keysForm");
         fillStorageKeyInputs(result.sessionStorageKeys, "sessionStorage");
     });
 }
 
 function fillStorageKeyInputs(storageKeys, tableToFill) {
     $.each(storageKeys, function(index, value) {
-        var inputFields = $('#' + tableToFill).find("input");
+        var inputFields = $('#' + tableToFill).find("input[]");
         $.each(inputFields, function(index, input) {
             if ($(input).val() == "") {
                 $(input).val(value);
@@ -52,9 +58,9 @@ function show_saved_options() {
 
 function changeHandler(e) {
     if (e.target.checked) {
-        $(e.target).parent().parent().find('input[id^="localStorage_ValuePath"]').parent().show();
+        $(e.target).parent().parent().find('input[class^="value"]').parent().show();
     } else {
-        $(e.target).parent().parent().find('input[id^="localStorage_ValuePath"]').parent().hide();
+        $(e.target).parent().parent().find('input[class^="value"]').parent().hide();
     }
 }
 
@@ -66,7 +72,7 @@ function clear_options() {
 
 function showValuePathHeader(){
   if($("input[id^='localStorage_ValuePath']")){
-    
+
   }
 }
 
