@@ -28,23 +28,28 @@ function save_options() {
 }
 
 function restore_options() {
-    chrome.storage.local.get(['localStorageKeys', 'sessionStorageKeys'], function(result) {
-        fillStorageKeyInputs(result.localStorageKeys, "keysForm");
-        fillStorageKeyInputs(result.sessionStorageKeys, "sessionStorage");
+    chrome.storage.local.get(['keysToTrack'], function(result) {
+        fillStorageKeyInputs(result.keysToTrack, "keysForm");
     });
 }
 
 function fillStorageKeyInputs(storageKeys, tableToFill) {
-    $.each(storageKeys, function(index, value) {
-        var inputFields = $('#' + tableToFill).find("input[]");
-        $.each(inputFields, function(index, input) {
-            if ($(input).val() == "") {
-                $(input).val(value);
+  var inputFields = $('#' + tableToFill).find("tr.keysToSave");
+    $.each(storageKeys, function(index, key) {
+        $.each(inputFields, function(index, row) {
+            if ($(row).find('input.key').val() == "") {
+                $(row).find('input.key').val(key._key);
+                $(row).find('input.isJson').prop('checked', key._isJson);
+                $(row).find('input.value').val(key._value);
                 //skip iteration
                 return false;
             }
         });
     });
+  $.each($("input.isJson:checked"),function(index,checkbox){
+   $(checkbox).closest("tr").find("input.value").parent().show();
+  })
+
 }
 
 function show_saved_options() {
