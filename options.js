@@ -84,6 +84,14 @@ function showHideHelp() {
     }
 }
 
+function addRow()
+{
+  var row = $("#keysForm").find(".keysToSave").eq(1).clone();
+  $(row).find("input").val("");
+  $(row).find("input[type='checkbox']").prop("checked",false);
+  $("#keysForm").find("tr.keysToSave:last").after(row);
+}
+
 function clear_options() {
     chrome.storage.local.clear();
     $("input").val("");
@@ -100,8 +108,6 @@ document.getElementById('save').addEventListener('click',
     save_options);
 document.getElementById('clear').addEventListener('click',
     clear_options);
-document.getElementById('show').addEventListener('click',
-    restore_options);
 document.addEventListener('DOMContentLoaded', function() {
     var checkboxes = document.querySelectorAll('.isJson');
     for (var i = 0; i < checkboxes.length; i++) {
@@ -109,5 +115,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 document.addEventListener('DOMContentLoaded', showValuePathHeader);
-document.getElementById('showHideHelp').addEventListener('click',
-    showHideHelp);
+document.getElementById('showHideHelp').addEventListener('click',showHideHelp);
+document.getElementById('addRow').addEventListener('click',addRow);
