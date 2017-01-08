@@ -1,5 +1,5 @@
 chrome.browserAction.onClicked.addListener(function(tab) {
-    chrome.storage.local.get(['localStorageKeys', 'sessionStorageKeys', 'extensionState'], function(result) {
+    chrome.storage.local.get(['keysToTrack', 'extensionState'], function(result) {
         chrome.tabs.query({
             active: true,
             currentWindow: true
