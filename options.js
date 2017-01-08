@@ -28,43 +28,34 @@ function save_options() {
 
 function restore_options() {
     chrome.storage.local.get(['keysToTrack'], function(result) {
-        fillStorageKeyInputs(result.keysToTrack, "keysForm");
+        populateOptionsTable(result.keysToTrack, "keysForm");
     });
 }
 
-function fillStorageKeyInputs(storageKeys, tableToFill) {
-    var inputFields = $('#' + tableToFill).find("tr.keysToSave");
-    $.each(storageKeys, function(index, key) {
-        $.each(inputFields, function(index, row) {
-            if ($(row).find('input.key').val() == "") {
-                $(row).find('input.key').val(key._key);
-                $(row).find('input.isJson').prop('checked', key._isJson);
-                $(row).find('input.value').val(key._value);
-                //skip iteration
-                return false;
-            }
-        });
+function populateOptionsTable(storageKeys, tableToFill) {
+    var emptyRow = $("#keysForm").find(".keysToSave").eq(0).clone();
+    $(emptyRow).find("input").val("");
+    $(emptyRow).find("input[type='checkbox']").prop("checked", false);
+    $("#keysForm > tr").slice(1).remove();
+
+    $.each(storageKeys, function(index, option) {
+        var optionRow = $(emptyRow).clone();
+        $(optionRow).find('input.key').val(option._key);
+        $(optionRow).find('input.isJson').prop("checked", option._isJson).on("change", changeHandler);
+        $(optionRow).find('input.value').val(option._value);
+        $(optionRow).show();
+        $("#keysForm").find("tr:last").after(optionRow);
     });
     $.each($("input.isJson:checked"), function(index, checkbox) {
-        $(checkbox).closest("tr").find("input.value").parent().show();
+        $(checkbox).closest("tr").find("input.value").show();
     })
-
-}
-
-function show_saved_options() {
-    var stuff = "";
-    chrome.storage.local.get(null, function(items) {
-        for (key in items) {
-            console.log(key);
-        }
-    });
 }
 
 function changeHandler(e) {
     if (e.target.checked) {
-        $(e.target).parent().parent().find('input[class^="value"]').parent().show();
+        $(e.target).parent().parent().find('input[class^="value"]').show();
     } else {
-        $(e.target).parent().parent().find('input[class^="value"]').parent().hide();
+        $(e.target).parent().parent().find('input[class^="value"]').hide();
     }
 }
 
@@ -84,36 +75,31 @@ function showHideHelp() {
     }
 }
 
-function addRow()
-{
-  var row = $("#keysForm").find(".keysToSave").eq(1).clone();
-  $(row).find("input").val("");
-  $(row).find("input[type='checkbox']").prop("checked",false);
-  $("#keysForm").find("tr.keysToSave:last").after(row);
+function addRow() {
+    var row = $("#keysForm").find(".keysToSave").eq(0).clone();
+    $(row).find("input").val("");
+    $(row).find("input[type='checkbox']").prop("checked", false).on("change", changeHandler);
+    $(row).show();
+    $("#keysForm").find("tr.keysToSave:last").after(row);
 }
 
 function clear_options() {
     chrome.storage.local.clear();
     $("input").val("");
-}
-
-function showValuePathHeader() {
-    if ($("input[id^='localStorage_ValuePath']")) {
-
-    }
+    $(".isJson").prop("checked", false);
+    $(".value").hide();
 }
 
 document.addEventListener('DOMContentLoaded', restore_options);
-document.getElementById('save').addEventListener('click',
-    save_options);
-document.getElementById('clear').addEventListener('click',
-    clear_options);
+document.getElementById('save').addEventListener('click', save_options);
+document.getElementById('clear').addEventListener('click', clear_options);
+document.getElementById('restore').addEventListener('click', restore_options);
+document.addEventListener('DOMContentLoaded', showValuePathHeader);
+document.getElementById('showHideHelp').addEventListener('click', showHideHelp);
+document.getElementById('addRow').addEventListener('click', addRow);
 document.addEventListener('DOMContentLoaded', function() {
     var checkboxes = document.querySelectorAll('.isJson');
     for (var i = 0; i < checkboxes.length; i++) {
         checkboxes[i].addEventListener('change', changeHandler);
     }
 });
-document.addEventListener('DOMContentLoaded', showValuePathHeader);
-document.getElementById('showHideHelp').addEventListener('click',showHideHelp);
-document.getElementById('addRow').addEventListener('click',addRow);

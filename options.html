@@ -8,82 +8,54 @@
 </head>
 
 <body>
-  <a href="#" id="showHideHelp">Show help!</a>
-  <table id="helpTable" class="hidden" style="display:none">
-    <tr>
-      <th>Example of tracking a value that's inside a JSON object:</th>
-    </tr>
-    <tr>
-      <td>Key = sessionState</td>
-    </tr>
-    <tr>
-      <td>IsJson = checked</td>
-    </tr>
-    <tr>
-      <td>Value = Steps[1].QuestionGroups[0].Label</td>
-    </tr>
-    <tr>
-      <th>This option will return the Label name of the first QuestionGroup of the second Step inside the sessionState object.</th>
-    </tr>
-  </table>
-  <!-- <p>
-    Example of tracking a value that's inside a JSON object:
-      Key = sessionState
-      IsJson = checked
-      Value = Steps[1].QuestionGroups[0].Label
-    This option will return the Label name of the first QuestionGroup of the second Step inside the sessionState object.
-  </p> -->
-<table id="keysForm">
-  <tr>
-    <th>
-      Key
-    </th>
-    <th>
-      Is Json
-    </th>
-    <th style="display:none">
-      Value Path
-    </th>
-  </tr>
-  <tr class="keysToSave">
-    <td>
-        <input class="key" type="text" value=""/>
-    </td>
-    <td style="text-align:center">
-      <input class="isJson" type="checkbox" style="text-align:center"/>
-    </td>
-    <td style="display:none">
-        <input class="value" type="text" value=""/>
-    </td>
-  </tr>
-  <tr class="keysToSave">
-    <td>
-        <input class="key" type="text" value=""/>
-    </td>
-    <td style="text-align:center">
-      <input class="isJson" type="checkbox" style="text-align:center"/>
-    </td>
-    <td style="display:none">
-        <input class="value" type="text" value=""/>
-    </td>
-  </tr>
-  <tr class="keysToSave">
-    <td style="text-align:center">
-        <input class="key" type="text" value=""/>
-    </td>
-    <td style="text-align:center">
-      <input class="isJson" type="checkbox" style="text-align:center"/>
-    </td>
-    <td style="display:none">
-        <input class="value" type="text" value=""/>
-    </td>
-  </tr>
-</table>
+    <a href="#" id="showHideHelp">Show help!</a>
+    <table id="helpTable" class="hidden" style="display:none">
+        <tr>
+            <th>Example of tracking a value that's inside a JSON object:</th>
+        </tr>
+        <tr>
+            <td>Key = sessionState</td>
+        </tr>
+        <tr>
+            <td>IsJson = checked</td>
+        </tr>
+        <tr>
+            <td>Value = Steps[1].QuestionGroups[0].Label</td>
+        </tr>
+        <tr>
+            <th>This option will return the Label name of the first QuestionGroup of the second Step inside the sessionState object.</th>
+        </tr>
+    </table>
+    <table id="keysForm">
+        <tr>
+            <th>
+                Key
+            </th>
+            <th>
+                Is Json
+            </th>
+            <th style="display:none">
+                Value Path
+            </th>
+        </tr>
+        <tr class="keysToSave" style="display:none">
+            <td>
+                <input class="key" type="text" value="" />
+            </td>
+            <td style="text-align:center">
+                <input class="isJson" type="checkbox" style="text-align:center" />
+            </td>
+            <td>
+                <input class="value" type="text" value="" style="display:none" />
+            </td>
+        </tr>
+    </table>
 
     <div id="status"></div>
     <button id="save">Save</button>
     <button id="clear">Clear</button>
     <button id="addRow">Add Row</button>
+    <button id="restore">Restore Options</button>
     <script src="options.js"></script>
     <script src="js/jquery.min.js"></script>
 </body>
