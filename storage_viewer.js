@@ -31,7 +31,7 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
         'font-size: 12px;' +
         'font-family: sans-serif;' +
         'font-weight: bold;' +
-        'background: rgba(54, 25, 25, .5);"><table><tr><th style="padding: 0 20px 0 5px;">Key</th><th style="padding: 0 20px 0 5px;">Value</th></tr>' + htmlRows + '</table></div>';
+        'background: rgba(54, 25, 25, .5);"><table><tr style="border-bottom:1pt solid white;"><th style="padding: 0 20px 0 5px;">Key</th><th style="padding: 0 20px 0 5px;">Value</th></tr>' + htmlRows + '</table></div>';
     chrome.storage.local.set({
         'extensionState': "open",
     });
