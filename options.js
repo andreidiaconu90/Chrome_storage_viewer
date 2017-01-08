@@ -3,17 +3,16 @@ function save_options() {
     var localStorageKeys = [];
     var sessionStorageKeys = [];
     var keysToTrack = [];
-    document.getElementById('keysForm').querySelectorAll('.keysToSave').forEach(function(row){
-      if($(row).find('.key').val())
-       {
-        var object = {};
-        object = {
-          _key : $(row).find('.key').val(),
-          _isJson : $(row).find('.isJson').is(":checked"),
-          _value : $(row).find('.value').val()
-        };
-        keysToTrack.push(object);
-      }
+    document.getElementById('keysForm').querySelectorAll('.keysToSave').forEach(function(row) {
+        if ($(row).find('.key').val()) {
+            var object = {};
+            object = {
+                _key: $(row).find('.key').val(),
+                _isJson: $(row).find('.isJson').is(":checked"),
+                _value: $(row).find('.value').val()
+            };
+            keysToTrack.push(object);
+        }
     });
     chrome.storage.local.set({
         'keysToTrack': keysToTrack,
@@ -34,7 +33,7 @@ function restore_options() {
 }
 
 function fillStorageKeyInputs(storageKeys, tableToFill) {
-  var inputFields = $('#' + tableToFill).find("tr.keysToSave");
+    var inputFields = $('#' + tableToFill).find("tr.keysToSave");
     $.each(storageKeys, function(index, key) {
         $.each(inputFields, function(index, row) {
             if ($(row).find('input.key').val() == "") {
@@ -46,9 +45,9 @@ function fillStorageKeyInputs(storageKeys, tableToFill) {
             }
         });
     });
-  $.each($("input.isJson:checked"),function(index,checkbox){
-   $(checkbox).closest("tr").find("input.value").parent().show();
-  })
+    $.each($("input.isJson:checked"), function(index, checkbox) {
+        $(checkbox).closest("tr").find("input.value").parent().show();
+    })
 
 }
 
@@ -69,16 +68,31 @@ function changeHandler(e) {
     }
 }
 
+function showHideHelp() {
+
+    if ($("#helpTable").hasClass("hidden")) {
+        $("#helpTable").show();
+        $("#helpTable").removeClass("hidden");
+        $("#helpTable").addClass("visible");
+        return;
+    }
+    if ($("#helpTable").hasClass("visible")) {
+        $("#helpTable").hide();
+        $("#helpTable").removeClass("visible");
+        $("#helpTable").addClass("hidden");
+        return;
+    }
+}
 
 function clear_options() {
     chrome.storage.local.clear();
     $("input").val("");
 }
 
-function showValuePathHeader(){
-  if($("input[id^='localStorage_ValuePath']")){
+function showValuePathHeader() {
+    if ($("input[id^='localStorage_ValuePath']")) {
 
-  }
+    }
 }
 
 document.addEventListener('DOMContentLoaded', restore_options);
@@ -94,4 +108,6 @@ document.addEventListener('DOMContentLoaded', function() {
         checkboxes[i].addEventListener('change', changeHandler);
     }
 });
-document.addEventListener('DOMContentLoaded',showValuePathHeader);
+document.addEventListener('DOMContentLoaded', showValuePathHeader);
+document.getElementById('showHideHelp').addEventListener('click',
+    showHideHelp);
