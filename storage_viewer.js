@@ -15,7 +15,7 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
             var result = path + " : " + jsonValue;
 
             var keyHtml = "<p>" + key._value + "</p>";
-            var valueHtml = jsonValue;
+            var valueHtml = "<p>" + jsonValue + "</p>";
             var htmlRow = "<tr><td style='padding: 0 20px 0 5px;'>" + keyHtml + "</td><td style='padding: 0 20px 0 5px;'>" + valueHtml + "</td></tr>";
           htmlRows += htmlRow;
         } else {
@@ -25,13 +25,14 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
 
     var html = '<div id="extensionOverlay"' +
         ' style="position: fixed;' +
-        'top: 0;' +
+        'top: 10px;' +
         'right:0;' +
         'color:white;' +
         'font-size: 12px;' +
         'font-family: sans-serif;' +
         'font-weight: bold;' +
-        'background: rgba(54, 25, 25, .5);"><table><tr style="border-bottom:1pt solid white;"><th style="padding: 0 20px 0 5px;">Key</th><th style="padding: 0 20px 0 5px;">Value</th></tr>' + htmlRows + '</table></div>';
+        'border-radius:10px;' +
+        'background: rgba(54, 25, 25, .5);"><table><tr style="border-bottom:1pt solid white;"><th style="padding: 5px 20px 0 5px;">Key</th><th style="padding: 5px 20px 0 5px;">Value</th></tr>' + htmlRows + '</table></div>';
     chrome.storage.local.set({
         'extensionState': "open",
     });
