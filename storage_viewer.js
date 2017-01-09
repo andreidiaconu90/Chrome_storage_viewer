@@ -19,7 +19,10 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
             var htmlRow = "<tr><td style='padding: 0 20px 0 5px;'>" + keyHtml + "</td><td style='padding: 0 20px 0 5px;'>" + valueHtml + "</td></tr>";
           htmlRows += htmlRow;
         } else {
-
+			var keyHtml = "<p>" + key._key + "</p>";
+			var valueHtml =  "<p>" + localStorage.getItem(key._key) + "</p>"
+			var htmlRow = "<tr><td style='padding: 0 20px 0 5px;'>" + keyHtml + "</td><td style='padding: 0 20px 0 5px;'>" + valueHtml + "</td></tr>";
+			htmlRows += htmlRow;
         }
     });
 
