@@ -93,7 +93,6 @@ function clear_options() {
 document.addEventListener('DOMContentLoaded', restore_options);
 document.getElementById('save').addEventListener('click', save_options);
 document.getElementById('clear').addEventListener('click', clear_options);
-document.getElementById('restore').addEventListener('click', restore_options);
 document.getElementById('showHideHelp').addEventListener('click', showHideHelp);
 document.getElementById('addRow').addEventListener('click', addRow);
 document.addEventListener('DOMContentLoaded', function() {
