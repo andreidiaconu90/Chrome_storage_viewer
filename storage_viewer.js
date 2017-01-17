@@ -5,7 +5,13 @@ document.addEventListener( "click", function(event){
 	    var element = event.target;
     if(element.id == "Refresh"){
       chrome.storage.local.get(['keysToTrack', 'extensionState'], function(result) {
-        displayOverlay(result);
+        var isRefresh = true;
+        var isSuccess = displayOverlay(result, undefined, 'isRefresh');
+
+        if(isSuccess){
+          // Update status to let user know options were refrehed.
+          addRefreshMessage();
+        }
       });
     }
 } );
@@ -26,7 +32,6 @@ Object.byString = function(o, s) {
     return o;
 }
 
-
 function displayOverlay (msg, sender, sendResponse){
   var htmlRows = "";
     if (sender && msg.extensionState === "open") {
@@ -36,7 +41,6 @@ function displayOverlay (msg, sender, sendResponse){
       $("#extensionOverlay").remove();
       return false;
   }else{
-    //remove overlay then reopen
       $("#extensionOverlay").remove();
   }
   $.each(msg.keysToTrack, function(index, key) {
@@ -69,9 +73,29 @@ function displayOverlay (msg, sender, sendResponse){
       'font-weight: bold;' +
       'border-radius:10px;' +
       'background: rgba(54, 25, 25, .5);"><table><tr style="border-bottom:1pt solid white;">'+
-'<th style="padding: 5px 20px 0 5px;">Key</th><th style="padding: 5px 20px 0 5px;">Value<div style="width:20px;height:20px;display:block;background:url('+ refreshButtonUrl +');float: right;cursor:pointer;"id="Refresh"></div></th></tr>' + htmlRows + '</table></div>';
+'<th style="padding: 5px 20px 0 5px;">Key</th>'+
+'<th style="padding: 5px 20px 0 5px;">Value'+
+'<div style="width:20px;height:20px;display:block;background:url('+ refreshButtonUrl +');float: right;cursor:pointer;"id="Refresh"></div></th>'+
+'</tr>' + htmlRows + '</table>'+
+'<i id="refreshMessage" style="display=none;"></i>' +
+'</div>';
+
   chrome.storage.local.set({
       'extensionState': "open",
   });
   $($.parseHTML(html)).appendTo('body');
+  return true;
+}
+
+function addRefreshMessage(){
+  var refreshDiv = document.getElementById('refreshMessage');
+  refreshDiv.textContent = 'Data has been refreshed!';
+  refreshDiv.style.display = "block";
+  refreshDiv.style.padding = "5px 20px 5px 5px";
+
+  setTimeout(function() {
+      refreshDiv.textContent = '';
+      refreshDiv.style.display = "none";
+      refreshDiv.style.padding = "0";
+  }, 2000);
 }
