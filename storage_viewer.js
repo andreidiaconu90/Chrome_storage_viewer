@@ -1,25 +1,68 @@
+const EXTENSION_OVERLAY_HTML = '<div id="extensionOverlay"' +
+    ' style="position: fixed;' +
+    'top: 10px;' +
+    'right:0;' +
+    'color:white;' +
+    'font-size: 12px;' +
+    'font-family: sans-serif;' +
+    'font-weight: bold;' +
+    'border-radius:10px;' +
+    'background: rgba(54, 25, 25, .5);"></div>'
+const NO_OPTIONS_CONFIGURED = '<p style="padding: 8px 5px 0 5px;">No options defined.<br/>Right click on the extension icon and click Options</p>'
+
 chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
-  displayOverlay(msg, sender, sendResponse);
+    displayOverlay(msg, sender, sendResponse);
 });
-document.addEventListener( "click", function(event){
-	    var element = event.target;
-    if(element.id == "Refresh"){
-      chrome.storage.local.get(['keysToTrack', 'extensionState'], function(result) {
-        var isRefresh = true;
-        var isSuccess = displayOverlay(result, undefined, 'isRefresh');
+document.addEventListener("click", function(event) {
+    var element = event.target;
+    if (element.id == "Refresh") {
+        chrome.storage.local.get(['keysToTrack', 'extensionState'], function(result) {
+            var isRefresh = true;
+            var isSuccess = displayOverlay(result, undefined, 'isRefresh');
 
-        if(isSuccess){
-          // Update status to let user know options were refrehed.
-          addRefreshMessage();
-        }
-      });
+            if (isSuccess) {
+                // Update status to let user know options were refrehed.
+                addRefreshMessage();
+            }
+        });
     }
-} );
+});
 
+function displayOverlay(msg, sender, sendResponse) {
+    var extensionOverlay = EXTENSION_OVERLAY_HTML;
 
+    if (sender && msg.extensionState === "open") {
+        chrome.storage.local.set({
+            "extensionState": ""
+        });
+        $("#extensionOverlay").remove();
+        return false;
+    } else {
+        $("#extensionOverlay").remove();
+    }
+    $($.parseHTML(extensionOverlay)).appendTo('body');
+    var htmlRows = generateHtmlRows(msg.keysToTrack);
+
+    if (msg.keysToTrack === undefined && htmlRows === "") {
+        var noOptionsConfigured = NO_OPTIONS_CONFIGURED;
+        $($.parseHTML(noOptionsConfigured)).appendTo('#extensionOverlay');
+    } else {
+        var refreshButtonUrl = chrome.extension.getURL('Refresh-20.png');
+        var table = '<table><tr style="border-bottom:1pt solid white;">' +
+            '<th style="padding: 5px 20px 0 5px;">Value' +
+            '<div style="width:20px;height:20px;display:block;background:url(' + refreshButtonUrl + ');float: right;cursor:pointer;"id="Refresh"></div></th>' +
+            '</tr>' + htmlRows +
+
+        $($.parseHTML(table)).appendTo('#extensionOverlay');
+    }
+    chrome.storage.local.set({
+        'extensionState': "open",
+    });
+    return true;
+}
 Object.byString = function(o, s) {
     s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
-    s = s.replace(/^\./, '');           // strip a leading dot
+    s = s.replace(/^\./, ''); // strip a leading dot
     var a = s.split('.');
     for (var i = 0, n = a.length; i < n; ++i) {
         var k = a[i];
@@ -32,18 +75,21 @@ Object.byString = function(o, s) {
     return o;
 }
 
-function displayOverlay (msg, sender, sendResponse){
-  var htmlRows = "";
-    if (sender && msg.extensionState === "open") {
-      chrome.storage.local.set({
-          "extensionState": ""
-      });
-      $("#extensionOverlay").remove();
-      return false;
-  }else{
-      $("#extensionOverlay").remove();
-  }
-  $.each(msg.keysToTrack, function(index, key) {
+function addRefreshMessage() {
+    var refreshDiv = document.getElementById('refreshMessage');
+    refreshDiv.textContent = 'Data has been refreshed!';
+    refreshDiv.style.display = "block";
+    refreshDiv.style.padding = "5px 20px 5px 5px";
+
+    setTimeout(function() {
+        refreshDiv.textContent = '';
+        refreshDiv.style.display = "none";
+        refreshDiv.style.padding = "0";
+    }, 2000);
+}
+function generateHtmlRows(keysToTrack){
+  var htmlRows="";
+  $.each(keysToTrack, function(index, key) {
       if (key._isJson === true) {
           var path = key._value;
           var value = JSON.parse(localStorage.getItem(key._key));
@@ -52,50 +98,14 @@ function displayOverlay (msg, sender, sendResponse){
 
           var keyHtml = "<p>" + key._value + "</p>";
           var valueHtml = "<p>" + jsonValue + "</p>";
-          var htmlRow = "<tr><td style='padding: 0 20px 0 5px;'>" + keyHtml + "</td><td style='padding: 0 20px 0 5px;'>" + valueHtml + "</td></tr>";
-        htmlRows += htmlRow;
+          var htmlRow = "<tr><td style='padding: 0 20px 0 10px;'>" + keyHtml + "</td><td style='padding: 0 20px 0 5px;'>" + valueHtml + "</td></tr>";
+          htmlRows += htmlRow;
       } else {
-    var keyHtml = "<p>" + key._key + "</p>";
-    var valueHtml =  "<p>" + localStorage.getItem(key._key) + "</p>"
-    var htmlRow = "<tr><td style='padding: 0 20px 0 5px;'>" + keyHtml + "</td><td style='padding: 0 20px 0 5px;'>" + valueHtml + "</td></tr>";
-    htmlRows += htmlRow;
+          var keyHtml = "<p>" + key._key + "</p>";
+          var valueHtml = "<p>" + localStorage.getItem(key._key) + "</p>"
+          var htmlRow = "<tr><td style='padding: 0 20px 0 10px;'>" + keyHtml + "</td><td style='padding: 0 20px 0 5px;'>" + valueHtml + "</td></tr>";
+          htmlRows += htmlRow;
       }
   });
-
-  var refreshButtonUrl = chrome.extension.getURL('Refresh-20.png');
-  var html = '<div id="extensionOverlay"' +
-      ' style="position: fixed;' +
-      'top: 10px;' +
-      'right:0;' +
-      'color:white;' +
-      'font-size: 12px;' +
-      'font-family: sans-serif;' +
-      'font-weight: bold;' +
-      'border-radius:10px;' +
-      'background: rgba(54, 25, 25, .5);"><table><tr style="border-bottom:1pt solid white;">'+
-'<th style="padding: 5px 20px 0 5px;">Key</th>'+
-'<th style="padding: 5px 20px 0 5px;">Value'+
-'<div style="width:20px;height:20px;display:block;background:url('+ refreshButtonUrl +');float: right;cursor:pointer;"id="Refresh"></div></th>'+
-'</tr>' + htmlRows + '</table>'+
-'<i id="refreshMessage" style="display=none;"></i>' +
-'</div>';
-
-  chrome.storage.local.set({
-      'extensionState': "open",
-  });
-  $($.parseHTML(html)).appendTo('body');
-  return true;
-}
-
-function addRefreshMessage(){
-  var refreshDiv = document.getElementById('refreshMessage');
-  refreshDiv.textContent = 'Data has been refreshed!';
-  refreshDiv.style.display = "block";
-  refreshDiv.style.padding = "5px 20px 5px 5px";
-
-  setTimeout(function() {
-      refreshDiv.textContent = '';
-      refreshDiv.style.display = "none";
-      refreshDiv.style.padding = "0";
-  }, 2000);
+  return htmlRows;
 }
