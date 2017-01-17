@@ -26,7 +26,8 @@
         ]
     }],
     "web_accessible_resources": [
-        "storage_viewer.html"
+        "storage_viewer.html",
+        "Refresh-20.png"
     ],
     "permissions": [
         "activeTab",
