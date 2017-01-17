@@ -49,9 +49,11 @@ function displayOverlay(msg, sender, sendResponse) {
     } else {
         var refreshButtonUrl = chrome.extension.getURL('Refresh-20.png');
         var table = '<table><tr style="border-bottom:1pt solid white;">' +
+            '<th style="padding: 0 20px 0 10px;">Key</th>' +
             '<th style="padding: 5px 20px 0 5px;">Value' +
             '<div style="width:20px;height:20px;display:block;background:url(' + refreshButtonUrl + ');float: right;cursor:pointer;"id="Refresh"></div></th>' +
             '</tr>' + htmlRows +
+            '</table><i id="refreshMessage" style="display=none;"></i>';
 
         $($.parseHTML(table)).appendTo('#extensionOverlay');
     }
