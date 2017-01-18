@@ -1,7 +1,7 @@
 const EXTENSION_OVERLAY_HTML = '<div id="extensionOverlay"' +
     ' style="position: fixed;' +
     'top: 10px;' +
-    'right:0;' +
+    'right:5px;' +
     'color:white;' +
     'font-size: 12px;' +
     'font-family: sans-serif;' +
@@ -49,8 +49,8 @@ function displayOverlay(msg, sender, sendResponse) {
     } else {
         var refreshButtonUrl = chrome.extension.getURL('Refresh-20.png');
         var table = '<table><tr style="border-bottom:1pt solid white;">' +
-            '<th style="padding: 0 20px 0 10px;">Key</th>' +
-            '<th style="padding: 5px 20px 0 5px;">Value' +
+            '<th style="padding:3px 10px 0 10px">Key</th>' +
+            '<th style="padding:3px 5px 0 10px">Value' +
             '<div style="width:20px;height:20px;display:block;background:url(' + refreshButtonUrl + ');float: right;cursor:pointer;"id="Refresh"></div></th>' +
             '</tr>' + htmlRows +
             '</table><i id="refreshMessage" style="display=none;"></i>';
@@ -87,27 +87,31 @@ function addRefreshMessage() {
         refreshDiv.textContent = '';
         refreshDiv.style.display = "none";
         refreshDiv.style.padding = "0";
-    }, 2000);
+    }, 1000);
 }
-function generateHtmlRows(keysToTrack){
-  var htmlRows="";
-  $.each(keysToTrack, function(index, key) {
-      if (key._isJson === true) {
-          var path = key._value;
-          var value = JSON.parse(localStorage.getItem(key._key));
-          var jsonValue = Object.byString(value, key._value);
-          var result = path + " : " + jsonValue;
 
-          var keyHtml = "<p>" + key._value + "</p>";
-          var valueHtml = "<p>" + jsonValue + "</p>";
-          var htmlRow = "<tr><td style='padding: 0 20px 0 10px;'>" + keyHtml + "</td><td style='padding: 0 20px 0 5px;'>" + valueHtml + "</td></tr>";
-          htmlRows += htmlRow;
-      } else {
-          var keyHtml = "<p>" + key._key + "</p>";
-          var valueHtml = "<p>" + localStorage.getItem(key._key) + "</p>"
-          var htmlRow = "<tr><td style='padding: 0 20px 0 10px;'>" + keyHtml + "</td><td style='padding: 0 20px 0 5px;'>" + valueHtml + "</td></tr>";
-          htmlRows += htmlRow;
-      }
-  });
-  return htmlRows;
+function generateHtmlRows(keysToTrack) {
+    var htmlRows = "";
+    $.each(keysToTrack, function(index, key) {
+        if (key._isJson === true) {
+            var jsonValue = "";
+            var path = key._value;
+            var value = JSON.parse(localStorage.getItem(key._key));
+            if (value !== null) {
+                jsonValue = Object.byString(value, key._value);
+            } else {
+                jsonValue = "parent is undefined";
+            }
+            var keyHtml = "<p>" + key._value + "</p>";
+            var valueHtml = "<p>" + jsonValue + "</p>";
+            var htmlRow = "<tr><td style='padding:3px 10px 0 10px'>" + keyHtml + "</td><td style='padding:3px 5px 0 10px'>" + valueHtml + "</td></tr>";
+            htmlRows += htmlRow;
+        } else {
+            var keyHtml = "<p>" + key._key + "</p>";
+            var valueHtml = "<p>" + localStorage.getItem(key._key) + "</p>"
+            var htmlRow = "<tr><td style='padding:3px 10px 0 10px'>" + keyHtml + "</td><td style='padding:3px 5px 0 10px'>" + valueHtml + "</td></tr>";
+            htmlRows += htmlRow;
+        }
+    });
+    return htmlRows;
 }
