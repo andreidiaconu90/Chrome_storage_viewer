@@ -22,7 +22,7 @@
         <tr>
             <td>Value = Parent[0].Child[1].SomeProperty</td>
         </tr>
-		<tr>&nbsp;</tr>
+        <tr>&nbsp;</tr>
         <tr>
             <th>After you save, this option will return the 'SomeProperty' value of the second Child' of the first 'Parent' inside the value of the 'StorageKeyName' key.</th>
         </tr>
@@ -54,10 +54,17 @@
 
     <div id="status"></div>
     <div style="display: inline;float: right;padding-bottom: 15px;">
-      <button id="save">Save</button>
-      <button id="clear" >Clear All</button>
+        <button id="save">Save</button>
+        <button id="clear">Clear All</button>
     </div>
     <button id="addRow" style="float:left">Add Row</button>
+    <div id="confirmDiv" style="display:none;clear:both;">
+        <p style="color:red">
+            Are you sure you want to delete all saved options?
+        </p>
+        <button id="confirmDelete">Yes</button>
+        <button id="cancelDelete">No</button>
+    </div>
     <script src="options.js"></script>
     <script src="js/jquery.min.js"></script>
 </body>

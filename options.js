@@ -83,16 +83,27 @@ function addRow() {
     $("#keysForm").find("tr.keysToSave:last").after(row);
 }
 
-function clear_options() {
-    chrome.storage.local.clear();
-    $("input").val("");
-    $(".isJson").prop("checked", false);
-    $(".value").hide();
+function clear_options(e) {
+    if (e.target.id === "clear") {
+        //show confirm div
+        $("#confirmDiv").show();
+    } else if (e.target.id === "cancelDelete") {
+        //hide confirm div
+        $("#confirmDiv").fadeOut(100);
+    } else if (e.target.id === "confirmDelete") {
+        chrome.storage.local.clear();
+        $("input").val("");
+        $(".isJson").prop("checked", false);
+        $(".value").hide();
+        $("#confirmDiv").fadeOut(100);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', restore_options);
 document.getElementById('save').addEventListener('click', save_options);
 document.getElementById('clear').addEventListener('click', clear_options);
+document.getElementById('confirmDelete').addEventListener('click', clear_options);
+document.getElementById('cancelDelete').addEventListener('click', clear_options);
 document.getElementById('showHideHelp').addEventListener('click', showHideHelp);
 document.getElementById('addRow').addEventListener('click', addRow);
 document.addEventListener('DOMContentLoaded', function() {
