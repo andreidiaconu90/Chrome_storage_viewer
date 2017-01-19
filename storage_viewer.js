@@ -51,10 +51,10 @@ function displayOverlay(msg, sender, sendResponse) {
         $($.parseHTML(noOptionsConfigured)).appendTo('#extensionOverlay');
     } else {
         var refreshButtonUrl = chrome.extension.getURL('Refresh-20.png');
-        var table = '<table><tr style="border-bottom:1pt solid white;">' +
+        var table = '<table style="margin-top:7px;margin-bottom:7px:"><tr style="border-bottom:1pt solid white;">' +
             '<th style="padding:3px 10px 0 10px">Key</th>' +
             '<th style="padding:3px 5px 0 10px">Value</th>' +
-            '<th style="padding:0 10px 0 10px"><div style="width:20px;height:20px;display:block;background:url(' + refreshButtonUrl + ');float: right;cursor:pointer;"id="Refresh"></div></th>' +
+            '<th style="padding-right:8px"><div style="width:20px;height:20px;display:block;background:url(' + refreshButtonUrl + ');float: right;cursor:pointer;"id="Refresh"></div></th>' +
             '</tr>' + htmlRows +
             '</table><i id="refreshMessage" style="display=none;"></i>'+
             '<i id="copyMessage" style="display=none;"></i>';
