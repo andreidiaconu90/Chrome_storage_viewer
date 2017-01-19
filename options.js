@@ -80,6 +80,7 @@ function addRow() {
     var row = $("#keysForm").find(".keysToSave").eq(0).clone();
     $(row).find("input").val("");
     $(row).find("input[type='checkbox']").prop("checked", false).on("change", changeHandler);
+    $(row).find('div.deleteOption').on("click",delete_option);
     $(row).show();
     $("#keysForm").find("tr.keysToSave:last").after(row);
 }
