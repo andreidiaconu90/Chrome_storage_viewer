@@ -94,6 +94,7 @@ function addRefreshMessage() {
 
 function generateHtmlRows(keysToTrack) {
     var htmlRows = "";
+    var copyButtonUrl = chrome.extension.getURL('Copy-20.png');
     $.each(keysToTrack, function(index, key) {
         if (key._isJson === true) {
             var jsonValue = "";
@@ -106,12 +107,18 @@ function generateHtmlRows(keysToTrack) {
             }
             var keyHtml = "<p>" + key._value + "</p>";
             var valueHtml = jsonValue;
-            var htmlRow = "<tr><td style='padding:3px 10px 0 10px'>" + keyHtml + "</td><td class='valueCell'style='padding:3px 5px 0 10px'><input type='text' style='background:none;border:none;width: 100%' value='" + valueHtml + "'readonly/></td><td><button id='copyToClipboard'>Copy</button></td></tr>";
+            var htmlRow = "<tr><td style='padding:3px 10px 0 10px'>" + keyHtml + "</td><td class='valueCell'style='padding:3px 5px 0 10px'>"+
+                                "<input type='text' style='background:none;border:none;width: 100%' value='" + valueHtml + "'readonly/>"+
+                              "</td>"+
+                              "<td><div id='copyToClipboard' style='width:20px;height:20px;display:block;background:url("+copyButtonUrl+");cursor:pointer'></div></td></tr>";
             htmlRows += htmlRow;
         } else {
             var keyHtml = "<p>" + key._key + "</p>";
             var valueHtml =  localStorage.getItem(key._key);
-            var htmlRow = "<tr><td style='padding:3px 10px 0 10px'>" + keyHtml + "</td><td class='valueCell'style='padding:3px 5px 0 10px'><input type='text' style='background:none;border:none;width: 100%' value='" + valueHtml + "'readonly/></td><td><button id='copyToClipboard'>Copy</button></td></tr>";
+            var htmlRow = "<tr><td style='padding:3px 10px 0 10px'>" + keyHtml + "</td><td class='valueCell'style='padding:3px 5px 0 10px'>"+
+                                  "<input type='text' style='background:none;border:none;width: 100%' value='" + valueHtml + "'readonly/>"+
+                               "</td>"+
+                               "<td><button id='copyToClipboard'>Copy</button></td></tr>";
             htmlRows += htmlRow;
         }
     });
