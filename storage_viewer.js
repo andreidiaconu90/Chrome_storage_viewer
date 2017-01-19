@@ -53,7 +53,7 @@ function displayOverlay(msg, sender, sendResponse) {
         var table = '<table><tr style="border-bottom:1pt solid white;">' +
             '<th style="padding:3px 10px 0 10px">Key</th>' +
             '<th style="padding:3px 5px 0 10px">Value</th>' +
-            '<th><div style="width:20px;height:20px;display:block;background:url(' + refreshButtonUrl + ');float: right;cursor:pointer;"id="Refresh"></div></th>' +
+            '<th style="padding:0 10px 0 10px"><div style="width:20px;height:20px;display:block;background:url(' + refreshButtonUrl + ');float: right;cursor:pointer;"id="Refresh"></div></th>' +
             '</tr>' + htmlRows +
             '</table><i id="refreshMessage" style="display=none;"></i>';
 
@@ -105,12 +105,12 @@ function generateHtmlRows(keysToTrack) {
             } else {
                 jsonValue = "parent is undefined";
             }
-            var keyHtml = "<p>" + key._value + "</p>";
+            var keyHtml = "<p style='margin:0'>" + key._value + "</p>";
             var valueHtml = jsonValue;
             var htmlRow = "<tr><td style='padding:3px 10px 0 10px'>" + keyHtml + "</td><td class='valueCell'style='padding:3px 5px 0 10px'>"+
                                 "<input type='text' style='background:none;border:none;width: 100%' value='" + valueHtml + "'readonly/>"+
                               "</td>"+
-                              "<td><div id='copyToClipboard' style='width:20px;height:20px;display:block;background:url("+copyButtonUrl+");cursor:pointer'></div></td></tr>";
+                              "<td style='padding:0 10px 0 10px'><div id='copyToClipboard' style='width:20px;height:20px;display:block;background:url("+copyButtonUrl+");cursor:pointer;'></div></td></tr>";
             htmlRows += htmlRow;
         } else {
             var keyHtml = "<p>" + key._key + "</p>";
@@ -118,7 +118,7 @@ function generateHtmlRows(keysToTrack) {
             var htmlRow = "<tr><td style='padding:3px 10px 0 10px'>" + keyHtml + "</td><td class='valueCell'style='padding:3px 5px 0 10px'>"+
                                   "<input type='text' style='background:none;border:none;width: 100%' value='" + valueHtml + "'readonly/>"+
                                "</td>"+
-                               "<td><button id='copyToClipboard'>Copy</button></td></tr>";
+                               "<td style='padding:0 10px 0 10px'><div id='copyToClipboard' style='width:20px;height:20px;display:block;background:url("+copyButtonUrl+");cursor:pointer;padding:0 5px 0 10px'></div></tr>";
             htmlRows += htmlRow;
         }
     });
