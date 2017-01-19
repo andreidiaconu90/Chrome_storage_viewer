@@ -3,7 +3,7 @@
 
     "name": "Storage viewer",
     "description": "This extension displays desired local/session storage values in the browser window",
-    "version": "1.0",
+    "version": "1.1",
     "author": "Andrei Diaconu",
 
     "browser_action": {
@@ -28,7 +28,7 @@
     "web_accessible_resources": [
         "storage_viewer.html",
         "Refresh-20.png",
-        "Copy-20.png"
+        "Copy-15.png"
     ],
     "permissions": [
         "activeTab",
