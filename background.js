@@ -8,3 +8,8 @@ chrome.browserAction.onClicked.addListener(function(tab) {
         });
     });
 });
+chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
+  chrome.storage.local.set({
+      "extensionState": ""
+  });
+});
