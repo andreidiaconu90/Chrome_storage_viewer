@@ -22,11 +22,12 @@ document.addEventListener("click", function(event) {
 
             if (isSuccess) {
                 // Update status to let user know options were refrehed.
-                addRefreshMessage();
+              showMessage("refresh");
             }
         });
     } else if (element.id === "copyToClipboard") {
         copyToClipboard(element);
+        showMessage("copy");
     }
 });
 
@@ -55,7 +56,8 @@ function displayOverlay(msg, sender, sendResponse) {
             '<th style="padding:3px 5px 0 10px">Value</th>' +
             '<th style="padding:0 10px 0 10px"><div style="width:20px;height:20px;display:block;background:url(' + refreshButtonUrl + ');float: right;cursor:pointer;"id="Refresh"></div></th>' +
             '</tr>' + htmlRows +
-            '</table><i id="refreshMessage" style="display=none;"></i>';
+            '</table><i id="refreshMessage" style="display=none;"></i>'+
+            '<i id="copyMessage" style="display=none;"></i>';
 
         $($.parseHTML(table)).appendTo('#extensionOverlay');
     }
@@ -78,18 +80,26 @@ Object.byString = function(o, s) {
     }
     return o;
 }
-
-function addRefreshMessage() {
-    var refreshDiv = document.getElementById('refreshMessage');
-    refreshDiv.textContent = 'Data has been refreshed!';
-    refreshDiv.style.display = "block";
-    refreshDiv.style.padding = "5px 20px 5px 5px";
-
-    setTimeout(function() {
-        refreshDiv.textContent = '';
-        refreshDiv.style.display = "none";
-        refreshDiv.style.padding = "0";
-    }, 1000);
+function showMessage(trigger){
+  var element = "";
+  var message = "";
+  if(trigger === "refresh")
+  {
+    element = document.getElementById('refreshMessage');
+    message = "Data has been refreshed!";
+  }
+  else if(trigger === "copy"){
+    element = document.getElementById('copyMessage');
+    message = "Copied!";
+  }
+  element.textContent = message;
+  element.style.display = "block";
+  element.style.padding = "5px 20px 5px 5px";
+  setTimeout(function() {
+      element.textContent = '';
+      element.style.display = "none";
+      element.style.padding = "0";
+  }, 1000);
 }
 
 function generateHtmlRows(keysToTrack) {
@@ -128,4 +138,5 @@ function generateHtmlRows(keysToTrack) {
 function copyToClipboard(e) {
     $(e).parent().parent().find('.valueCell').find("input").select();
     document.execCommand('copy');
+    $(e).parent().parent().find('.valueCell').find("input").blur();
 }
