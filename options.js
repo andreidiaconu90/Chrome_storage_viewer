@@ -42,6 +42,7 @@ function populateOptionsTable(storageKeys, tableToFill) {
         var optionRow = $(emptyRow).clone();
         $(optionRow).find('input.key').val(option._key);
         $(optionRow).find('input.isJson').prop("checked", option._isJson).on("change", changeHandler);
+        $(optionRow).find('div.deleteOption').on("click",delete_option);
         $(optionRow).find('input.value').val(option._value);
         $(optionRow).show();
         $("#keysForm").find("tr:last").after(optionRow);
@@ -97,6 +98,9 @@ function clear_options(e) {
         $(".value").hide();
         $("#confirmDiv").fadeOut(100);
     }
+}
+function delete_option(e){
+  $(e.target).parent().parent().remove();
 }
 
 document.addEventListener('DOMContentLoaded', restore_options);
