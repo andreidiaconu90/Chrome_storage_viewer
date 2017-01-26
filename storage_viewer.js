@@ -46,7 +46,7 @@ function displayOverlay(msg, sender, sendResponse) {
     $($.parseHTML(extensionOverlay)).appendTo('body');
     var htmlRows = generateHtmlRows(msg.keysToTrack);
 
-    if (msg.keysToTrack === undefined && htmlRows === "") {
+    if ((msg.keysToTrack === undefined || msg.keysToTrack.length === 0) && htmlRows === "") {
         var noOptionsConfigured = NO_OPTIONS_CONFIGURED;
         $($.parseHTML(noOptionsConfigured)).appendTo('#extensionOverlay');
     } else {
