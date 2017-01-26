@@ -111,16 +111,21 @@ function clear_options(e) {
         $(".isJson").prop("checked", false);
         $(".value").hide();
         $("#confirmDiv").hide();
-        $("#saveReminder").show();
-        setTimeout(function() {
-            $("#saveReminder").hide()
-        }, 3000);
+        showReminder();
 
     }
 }
 function delete_option(e){
   $(e.target).parent().parent().remove();
   showHideHeader();
+  showReminder();
+}
+
+function showReminder(){
+  $("#saveReminder").show();
+  setTimeout(function() {
+      $("#saveReminder").hide()
+  }, 3000);
 }
 
 document.addEventListener('DOMContentLoaded', restore_options);
