@@ -110,7 +110,12 @@ function clear_options(e) {
         $("input").val("");
         $(".isJson").prop("checked", false);
         $(".value").hide();
-        $("#confirmDiv").fadeOut(100);
+        $("#confirmDiv").hide();
+        $("#saveReminder").show();
+        setTimeout(function() {
+            $("#saveReminder").hide()
+        }, 3000);
+
     }
 }
 function delete_option(e){
