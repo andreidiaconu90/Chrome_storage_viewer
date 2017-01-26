@@ -27,32 +27,36 @@
             <th>After you save, this option will return the 'SomeProperty' value of the second Child' of the first 'Parent' inside the value of the 'StorageKeyName' key.</th>
         </tr>
     </table>
-    <table id="keysForm">
-        <tr>
+    <table id="keysForm" style="table-layout:fixed;">
+      <thead>
+        <tr class="headerRow" style="display:none">
             <th>
                 Key
             </th>
             <th>
                 Is Json
             </th>
-            <th style="display:none">
-                Value Path
+            <th class="valuePathHeader"style="display:none">
+                Path
             </th>
         </tr>
-        <tr class="keysToSave" style="display:none">
-            <td>
-                <input class="key" type="text" value="" />
-            </td>
-            <td style="text-align:center">
-                <input class="isJson" type="checkbox" style="text-align:center" />
-            </td>
-            <td>
-                <input class="value" type="text" value="" style="display:none" />
-            </td>
-            <td>
-              <div class="deleteOption" style='width:20px;height:20px;display:block;background:url("/Delete-20-black.png");cursor:pointer'></div>
-            </td>
-        </tr>
+      </thead>
+        <tbody>
+          <tr class="keysToSave" style="display:none">
+              <td>
+                  <input class="key" type="text" value="" />
+              </td>
+              <td style="text-align:center">
+                  <input class="isJson" type="checkbox" style="text-align:center" />
+              </td>
+              <td>
+                  <input class="value" type="text" value="" style="display:none" />
+              </td>
+              <td>
+                <div class="deleteOption" style='width:20px;height:20px;display:block;background:url("/Delete-20-black.png");cursor:pointer'></div>
+              </td>
+          </tr>
+        </tbody>
     </table>
 
     <div id="status"></div>

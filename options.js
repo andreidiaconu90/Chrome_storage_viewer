@@ -55,8 +55,13 @@ function populateOptionsTable(storageKeys, tableToFill) {
 function changeHandler(e) {
     if (e.target.checked) {
         $(e.target).parent().parent().find('input[class^="value"]').show();
+        $('.valuePathHeader').show();
     } else {
         $(e.target).parent().parent().find('input[class^="value"]').hide();
+        if($('input[class^="value"]:visible').length === 0)
+        {
+          $('.valuePathHeader').hide();
+        }
     }
 }
 
@@ -83,8 +88,16 @@ function addRow() {
     $(row).find('div.deleteOption').on("click",delete_option);
     $(row).show();
     $("#keysForm").find("tr.keysToSave:last").after(row);
+    showHideHeader();
 }
 
+function showHideHeader(){
+  if($("#keysForm tbody").find("tr:visible").length > 0){
+    $(".headerRow").show();
+  }else{
+    $(".headerRow").hide();
+  }
+}
 function clear_options(e) {
     if (e.target.id === "clear") {
         //show confirm div
@@ -102,6 +115,7 @@ function clear_options(e) {
 }
 function delete_option(e){
   $(e.target).parent().parent().remove();
+  showHideHeader();
 }
 
 document.addEventListener('DOMContentLoaded', restore_options);
