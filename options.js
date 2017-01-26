@@ -50,6 +50,7 @@ function populateOptionsTable(storageKeys, tableToFill) {
     $.each($("input.isJson:checked"), function(index, checkbox) {
         $(checkbox).closest("tr").find("input.value").show();
     })
+    showHideHeader();
 }
 
 function changeHandler(e) {
@@ -94,6 +95,10 @@ function addRow() {
 function showHideHeader(){
   if($("#keysForm tbody").find("tr:visible").length > 0){
     $(".headerRow").show();
+    if($("#keysForm tbody").find("tr:visible").find("input.value:visible").length > 0)
+    {
+      $(".valuePathHeader").show();
+    }
   }else{
     $(".headerRow").hide();
   }
@@ -111,6 +116,8 @@ function clear_options(e) {
         $(".isJson").prop("checked", false);
         $(".value").hide();
         $("#confirmDiv").hide();
+        $(".keysToSave").hide().not(":first").remove();
+        showHideHeader();
         showReminder();
 
     }
