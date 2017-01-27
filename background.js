@@ -13,3 +13,7 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
       "extensionState": ""
   });
 });
+
+chrome.runtime.onInstalled.addListener(function (object) {
+  chrome.tabs.create({ 'url': 'chrome://extensions/?options=' + chrome.runtime.id });
+});
