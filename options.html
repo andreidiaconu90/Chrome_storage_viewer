@@ -42,7 +42,35 @@
         </tr>
       </thead>
         <tbody>
-          <tr class="keysToSave" style="display:none">
+          <tr class="keysToSave">
+              <td>
+                  <input class="key" type="text" value="" />
+              </td>
+              <td style="text-align:center;width: 32px;">
+                  <input class="isJson" type="checkbox" style="text-align:center" />
+              </td>
+              <td>
+                  <input class="value" type="text" value="" style="display:none" />
+              </td>
+              <td>
+                <div class="deleteOption" style='width:20px;height:20px;display:block;background:url("/Delete-20-black.png");cursor:pointer'></div>
+              </td>
+          </tr>
+          <tr class="keysToSave">
+              <td>
+                  <input class="key" type="text" value="" />
+              </td>
+              <td style="text-align:center;width: 32px;">
+                  <input class="isJson" type="checkbox" style="text-align:center" />
+              </td>
+              <td>
+                  <input class="value" type="text" value="" style="display:none" />
+              </td>
+              <td>
+                <div class="deleteOption" style='width:20px;height:20px;display:block;background:url("/Delete-20-black.png");cursor:pointer'></div>
+              </td>
+          </tr>
+          <tr class="keysToSave">
               <td>
                   <input class="key" type="text" value="" />
               </td>
@@ -66,6 +94,7 @@
             <button id="clear">Clear All</button>
         </div>
         <button id="addRow" style="float:left">Add Row</button>
+        <button id="RestoreOptions">Restore options</button>
     </div>
     <div id="confirmDiv" style="display:none;clear:both;">
         <p style="color:red">

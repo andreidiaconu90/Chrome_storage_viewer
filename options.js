@@ -48,8 +48,17 @@ function populateOptionsTable(storageKeys, tableToFill) {
     });
     $.each($("input.isJson:checked"), function(index, checkbox) {
         $(checkbox).closest("tr").find("input.value").show();
-    })
+    });
+    if(storageKeys !== undefined){
+      $.each($("#keysForm").find("tr.keysToSave > td > input.key"),function(index,input){
+        if($(input).val()===''){
+          $(input).parent().parent().hide();
+        }
+      });
+    }
+
     showHideHeader();
+
 }
 
 function changeHandler(e) {
@@ -111,6 +120,7 @@ function clear_options(e) {
         $("#confirmDiv").fadeOut(100);
     } else if (e.target.id === "confirmDelete") {
         chrome.storage.local.clear();
+        debugger;
         $("input").val("");
         $(".isJson").prop("checked", false);
         $(".value").hide();
@@ -135,6 +145,7 @@ function showReminder(){
 }
 
 document.addEventListener('DOMContentLoaded', restore_options);
+document.getElementById('RestoreOptions').addEventListener('click', restore_options);
 document.getElementById('save').addEventListener('click', save_options);
 document.getElementById('clear').addEventListener('click', clear_options);
 document.getElementById('confirmDelete').addEventListener('click', clear_options);
