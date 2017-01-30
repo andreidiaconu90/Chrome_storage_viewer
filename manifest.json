@@ -33,7 +33,8 @@
         "storage_viewer.html",
         "Refresh-20.png",
         "Copy-15.png",
-        "Delete-20-black.png"
+        "Delete-20-black.png",
+        "style.css"
     ],
     "permissions": [
         "activeTab",
