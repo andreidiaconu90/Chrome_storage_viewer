@@ -16,6 +16,7 @@ const OVERLAY_REFRESH_BUTTON_STYLE = "width:20px !important;height:20px !importa
 const OVERLAY_COPY_BUTTON_STYLE = "width:15px;height:15px;display:block;cursor:pointer;";
 
 
+
 chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
     displayOverlay(msg, sender, sendResponse);
 });
