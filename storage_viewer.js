@@ -108,8 +108,18 @@ function generateHtmlRows(keysToTrack) {
     $.each(keysToTrack, function(index, key) {
         if (key._isJson === true) {
             var jsonValue = "";
+            var storageVal = localStorage.getItem(key._key);
+            var value = "";
             var path = key._value;
-            var value = JSON.parse(localStorage.getItem(key._key));
+
+            if(storageVal !== null)
+            {
+              value = JSON.parse(storageVal);
+            }else
+            {
+              value = JSON.parse(sessionStorage.getItem(key._key));
+            }
+
             if (value !== null) {
                 jsonValue = Object.byString(value, key._value);
             } else {
@@ -125,6 +135,10 @@ function generateHtmlRows(keysToTrack) {
         } else {
             var keyHtml = "<p  style='margin:0'>" + key._key + "</p>";
             var valueHtml =  localStorage.getItem(key._key);
+            if(valueHtml === null)
+            {
+                valueHtml = sessionStorage.getItem(key._key);
+            }
             var htmlRow = "<tr><td style='padding:3px 10px 0 10px'>" + keyHtml + "</td><td class='valueCell'style='padding:3px 5px 0 10px'>"+
                                   "<input type='text' style='background:none;border:none;width: 100%' value='" + valueHtml + "'readonly/>"+
                                "</td>"+
