@@ -42,6 +42,9 @@ document.addEventListener("click", function(event) {
     } else if (element.id === "copyToClipboard") {
         copyToClipboard(element);
         showMessage("copy");
+    } else if (element.id === "removeKey") {
+        removeKey(element);
+        showMessage("copy");
     }
 });
 
@@ -130,11 +133,11 @@ function generateHtmlRows(keysToTrack) {
                 jsonValue = "parent is undefined";
             }
             var keyHtml = "<p style='margin:0'>" + key._value + "</p>";
-            htmlRows += generateHtml(keyHtml,jsonValue,false);
+            htmlRows += generateHtml(keyHtml,jsonValue,false,key._type);
         } else {
             var keyHtml = "<p  style='margin:0'>" + key._key + "</p>";
             var valueHtml = getItemFromStorage(key);
-            htmlRows += generateHtml(keyHtml,valueHtml,true);
+            htmlRows += generateHtml(keyHtml,valueHtml,true,key._type);
         }
     });
     return htmlRows;
@@ -171,7 +174,7 @@ function getItemFromStorage(key){
   return value;
 }
 
-function generateHtml(keyHtml,valueHtml,showDelete)
+function generateHtml(keyHtml,valueHtml,showDelete,keyLocation)
 {
   var copyButtonUrl = chrome.extension.getURL('Copy-15.png');
   var deleteButtonUrl = chrome.extension.getURL('Delete-15.png');
@@ -181,7 +184,8 @@ function generateHtml(keyHtml,valueHtml,showDelete)
     "</td>" +
     "<td style='padding:0 10px 0 10px'>"+
       "<div id='copyToClipboard' style='" + OVERLAY_COPY_BUTTON_STYLE + "background:url(" + copyButtonUrl + ")'></div>"+
-    "</td>";
+    "</td>"+
+    "<td style='display:none'><p class='keyLocation'>"+keyLocation+"</p></td>";
 
   if(showDelete)
   {
@@ -197,7 +201,45 @@ function generateHtml(keyHtml,valueHtml,showDelete)
   html = "<tr>" + html + "<tr>";
   return html;
 }
+function removeKey(e)
+{
+  var keyToRemove = $(e).parent().parent().find("p:not(.keyLocation)").text();
+  var keyLocation = $(e).parent().parent().find("p.keyLocation").text();
+  if(keyLocation == selectedType.LocalStorage)
+  {
+      localStorage.removeItem(keyToRemove);
+      var savedKeys = [];
+      var keysToRemove = [];
+      chrome.storage.local.get(['keysToTrack'], function(result) {
+        savedKeys = result.keysToTrack;
+        $.each(savedKeys,function(index, key)
+        {
+            if(key._key === keyToRemove && key._type === keyLocation)
+            {
+              keysToRemove.push(index);
+            }
+      });
+    });
+     $.each(keysToRemove,function(index,key){
+        savedKeys.splice(key,1);
+     });
+     chrome.storage.local.set({
+         'keysToTrack': savedKeys,
+     });
+  }
+  if(keyLocation == selectedType.SessionStorage)
+  {
+      sessionStorage.removeItem(keyToRemove);
+  }
+  if(keyLocation == selectedType.Cookie)
+  {
 
+  }
+  if(keyLocation == selectedType.All)
+  {
+
+  }
+}
 function copyToClipboard(e) {
     $(e).parent().parent().find('.valueCell').find("input").select();
     document.execCommand('copy');
