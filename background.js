@@ -15,5 +15,7 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
 });
 
 chrome.runtime.onInstalled.addListener(function (object) {
-  chrome.tabs.create({ 'url': 'chrome://extensions/?options=' + chrome.runtime.id });
+  if(object.reason === "install"){
+    chrome.tabs.create({ 'url': 'chrome://extensions/?options=' + chrome.runtime.id });
+  }
 });
