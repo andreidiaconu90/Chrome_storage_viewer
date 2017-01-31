@@ -7,7 +7,8 @@ const EXTENSION_OVERLAY_HTML = '<div id="extensionOverlay"' +
     'font-family: sans-serif !important;' +
     'font-weight: bold !important;' +
     'border-radius:10px !important;' +
-    'background: rgba(54, 25, 25, .5) !important;z-index: 888888888888  !important;"></div>'
+    'font-family:Helvetica !important;'+
+    'background: rgba(54, 25, 25, .5) !important;z-index: 888888888888  !important;"></div>';
 const NO_OPTIONS_CONFIGURED = '<p style="padding: 8px 5px 0 5px;!important">No options defined.<br/>Right click on the extension icon and click Options</p>'
 const OVERLAY_TABLE_STYLE = "margin-top:7px !important;margin-bottom:7px !important";
 const OVERLAY_TABLE_ROW_STYLE = "border-bottom:1pt solid white !important";
@@ -120,10 +121,10 @@ function generateHtmlRows(keysToTrack) {
     $.each(keysToTrack, function(index, key) {
         if (key._isJson === true) {
             var jsonValue = "";
-            var value = JSON.parse(getItemFromStorage(key));
+            var value = getItemFromStorage(key);
             var path = key._value;
-            if (value !== null) {
-                jsonValue = Object.byString(value, key._value);
+            if (value) {
+                jsonValue = Object.byString(JSON.parse(value), key._value);
             } else {
                 jsonValue = "parent is undefined";
             }
@@ -175,7 +176,7 @@ function generateHtml(keyHtml,valueHtml)
   var html= " "+
   "<tr>"+
     "<td style='" + OVERLAY_TABLE_HEADER_STYLE + "'>" + keyHtml + "</td><td class='valueCell'style='padding:3px 5px 0 10px'>" +
-      "<input type='text' style='background:none;border:none;width: 100%' value='" + valueHtml + "'readonly/>" +
+      "<input type='text' style='background:none;border:none;width: 100%;color:white !important;font-family:Helvetica !important'; value='" + valueHtml + "'readonly/>" +
     "</td>" +
     "<td style='padding:0 10px 0 10px'>"+
       "<div id='copyToClipboard' style='" + OVERLAY_COPY_BUTTON_STYLE + "background:url(" + copyButtonUrl + ")'></div>"+
