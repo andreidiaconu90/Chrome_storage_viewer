@@ -36,8 +36,11 @@
             <th style="width: 32px;">
                 Json
             </th>
-            <th class="valuePathHeader"style="display:none">
+            <th class="valuePathHeader"style="visibility:hidden">
                 Path
+            </th>
+            <th class="typeHeader">
+                Type
             </th>
         </tr>
       </thead>
@@ -53,18 +56,14 @@
                   <input class="value" type="text" value="" style="display:none" />
               </td>
               <td>
-                <div class="deleteOption" style='width:20px;height:20px;display:block;background:url("/Delete-20-black.png");cursor:pointer'></div>
-              </td>
-          </tr>
-          <tr class="keysToSave">
-              <td>
-                  <input class="key" type="text" value="" />
-              </td>
-              <td style="text-align:center;width: 32px;">
-                  <input class="isJson" type="checkbox" style="text-align:center" />
-              </td>
-              <td>
-                  <input class="value" type="text" value="" style="display:none" />
+                <div>
+                  <select>
+                    <option value="0">Select type</option>
+                    <option value="1">Local storage</option>
+                    <option value="2">Session storage</option>
+                    <option value="3">Cookie data</option>
+                  </select>
+                </div>
               </td>
               <td>
                 <div class="deleteOption" style='width:20px;height:20px;display:block;background:url("/Delete-20-black.png");cursor:pointer'></div>
@@ -79,6 +78,40 @@
               </td>
               <td>
                   <input class="value" type="text" value="" style="display:none" />
+              </td>
+              <td>
+                <div>
+                  <select>
+                    <option value="0">Select type</option>
+                    <option value="1">Local storage</option>
+                    <option value="2">Session storage</option>
+                    <option value="3">Cookie data</option>
+                  </select>
+                </div>
+              </td>
+              <td>
+                <div class="deleteOption" style='width:20px;height:20px;display:block;background:url("/Delete-20-black.png");cursor:pointer'></div>
+              </td>
+          </tr>
+          <tr class="keysToSave">
+              <td>
+                  <input class="key" type="text" value="" />
+              </td>
+              <td style="text-align:center;width: 32px;">
+                  <input class="isJson" type="checkbox" style="text-align:center" />
+              </td>
+              <td>
+                  <input class="value" type="text" value="" style="display:none" />
+              </td>
+              <td>
+                <div>
+                  <select>
+                    <option value="0">Select type</option>
+                    <option value="1">Local storage</option>
+                    <option value="2">Session storage</option>
+                    <option value="3">Cookie data</option>
+                  </select>
+                </div>
               </td>
               <td>
                 <div class="deleteOption" style='width:20px;height:20px;display:block;background:url("/Delete-20-black.png");cursor:pointer'></div>

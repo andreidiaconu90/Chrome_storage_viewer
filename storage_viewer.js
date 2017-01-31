@@ -14,7 +14,12 @@ const OVERLAY_TABLE_ROW_STYLE = "border-bottom:1pt solid white !important";
 const OVERLAY_TABLE_HEADER_STYLE = "padding:3px 10px 0 10px !important";
 const OVERLAY_REFRESH_BUTTON_STYLE = "width:20px !important;height:20px !important;display:block !important;float: right !important;cursor:pointer !important;";
 const OVERLAY_COPY_BUTTON_STYLE = "width:15px;height:15px;display:block;cursor:pointer;";
-
+var selectedType = {
+         None: 0,
+         LocalStorage: 1,
+         SessionStorage:2,
+         Cookie:3
+};
 
 
 chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {

@@ -9,7 +9,8 @@ function save_options() {
             object = {
                 _key: $(row).find('.key').val(),
                 _isJson: $(row).find('.isJson').is(":checked"),
-                _value: $(row).find('.value').val()
+                _value: $(row).find('.value').val(),
+                _type: $(row).find("select").find(":selected").val()
             };
             keysToTrack.push(object);
         }
@@ -43,6 +44,7 @@ function populateOptionsTable(storageKeys, tableToFill) {
         $(optionRow).find('input.isJson').prop("checked", option._isJson).on("change", changeHandler);
         $(optionRow).find('div.deleteOption').on("click",delete_option);
         $(optionRow).find('input.value').val(option._value);
+        $(optionRow).find('select').val(option._type);
         $(optionRow).show();
         $("#keysForm").find("tr:last").after(optionRow);
     });
@@ -64,12 +66,12 @@ function populateOptionsTable(storageKeys, tableToFill) {
 function changeHandler(e) {
     if (e.target.checked) {
         $(e.target).parent().parent().find('input[class^="value"]').show();
-        $('.valuePathHeader').show();
+        $('.valuePathHeader').css("visibility","visible");
     } else {
         $(e.target).parent().parent().find('input[class^="value"]').hide();
         if($('input[class^="value"]:visible').length === 0)
         {
-          $('.valuePathHeader').hide();
+          $('.valuePathHeader').css("visibility","hidden");
         }
     }
 }
@@ -105,7 +107,7 @@ function showHideHeader(){
     $(".headerRow").show();
     if($("#keysForm tbody").find("tr:visible").find("input.value:visible").length > 0)
     {
-      $(".valuePathHeader").show();
+      $(".valuePathHeader").css("visibility","visible");
     }
   }else{
     $(".headerRow").hide();
