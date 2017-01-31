@@ -14,6 +14,7 @@ const OVERLAY_TABLE_ROW_STYLE = "border-bottom:1pt solid white !important";
 const OVERLAY_TABLE_HEADER_STYLE = "padding:3px 10px 0 10px !important";
 const OVERLAY_REFRESH_BUTTON_STYLE = "width:20px !important;height:20px !important;display:block !important;float: right !important;cursor:pointer !important;";
 const OVERLAY_COPY_BUTTON_STYLE = "width:15px;height:15px;display:block;cursor:pointer;";
+
 var selectedType = {
          None: "0",
          LocalStorage: "1",
@@ -34,7 +35,6 @@ document.addEventListener("click", function(event) {
             var isSuccess = displayOverlay(result, undefined, 'isRefresh');
 
             if (isSuccess) {
-                // Update status to let user know options were refrehed.
                 showMessage("refresh");
             }
         });
@@ -159,7 +159,8 @@ function getItemFromStorage(key){
       var regex = new RegExp("(?:(?:^|.*;\\s*)"+key._key+"\\s*\\=\\s*([^;]*).*$)|^.*$");
       value = document.cookie.replace(regex, "$1");
   }
-  if(key._type === selectedType.All){
+  if(key._type === selectedType.All)
+  { //if All is selected look in all storage locations and return the first key to match
      if(localStorage.getItem(key._key) !== null)
      {
        value = localStorage.getItem(key._key);
