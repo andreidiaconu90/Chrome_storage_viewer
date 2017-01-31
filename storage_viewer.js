@@ -66,6 +66,7 @@ function displayOverlay(msg, sender, sendResponse) {
     } else {
         var refreshButtonUrl = chrome.extension.getURL('Refresh-20.png');
         var table = '<table style="' + OVERLAY_TABLE_STYLE + '"><tr style="' + OVERLAY_TABLE_ROW_STYLE + '">' +
+            '<th></th>'+
             '<th style="' + OVERLAY_TABLE_HEADER_STYLE + '">Key</th>' +
             '<th style="' + OVERLAY_TABLE_HEADER_STYLE + '">Value</th>' +
             '<th style="padding-right:8px !important"><div style="' + OVERLAY_REFRESH_BUTTON_STYLE + ';background:url(' + refreshButtonUrl + ');"id="Refresh"></div></th>' +
@@ -129,11 +130,11 @@ function generateHtmlRows(keysToTrack) {
                 jsonValue = "parent is undefined";
             }
             var keyHtml = "<p style='margin:0'>" + key._value + "</p>";
-            htmlRows += generateHtml(keyHtml,jsonValue);
+            htmlRows += generateHtml(keyHtml,jsonValue,false);
         } else {
             var keyHtml = "<p  style='margin:0'>" + key._key + "</p>";
             var valueHtml = getItemFromStorage(key);
-            htmlRows += generateHtml(keyHtml,valueHtml);
+            htmlRows += generateHtml(keyHtml,valueHtml,true);
         }
     });
     return htmlRows;
@@ -170,18 +171,30 @@ function getItemFromStorage(key){
   return value;
 }
 
-function generateHtml(keyHtml,valueHtml)
+function generateHtml(keyHtml,valueHtml,showDelete)
 {
   var copyButtonUrl = chrome.extension.getURL('Copy-15.png');
+  var deleteButtonUrl = chrome.extension.getURL('Delete-15.png');
   var html= " "+
-  "<tr>"+
     "<td style='" + OVERLAY_TABLE_HEADER_STYLE + "'>" + keyHtml + "</td><td class='valueCell'style='padding:3px 5px 0 10px'>" +
       "<input type='text' style='background:none;border:none;width: 100%;color:white !important;font-family:Helvetica !important'; value='" + valueHtml + "'readonly/>" +
     "</td>" +
     "<td style='padding:0 10px 0 10px'>"+
       "<div id='copyToClipboard' style='" + OVERLAY_COPY_BUTTON_STYLE + "background:url(" + copyButtonUrl + ")'></div>"+
-    "</td>"+
-  "</tr>";
+    "</td>";
+
+  if(showDelete)
+  {
+    var button ="<td style='padding:0 10px 0 10px'>"+
+          "<div id='removeKey' style='" + OVERLAY_COPY_BUTTON_STYLE + "background:url(" + deleteButtonUrl + ")'></div>"+
+        "</td>";
+      html = button + html;
+  }else
+  {
+    var button = "<td>&nbsp;</td>"
+    html = button + html;
+  }
+  html = "<tr>" + html + "<tr>";
   return html;
 }
 
