@@ -15,10 +15,11 @@ const OVERLAY_TABLE_HEADER_STYLE = "padding:3px 10px 0 10px !important";
 const OVERLAY_REFRESH_BUTTON_STYLE = "width:20px !important;height:20px !important;display:block !important;float: right !important;cursor:pointer !important;";
 const OVERLAY_COPY_BUTTON_STYLE = "width:15px;height:15px;display:block;cursor:pointer;";
 var selectedType = {
-         None: 0,
-         LocalStorage: 1,
-         SessionStorage:2,
-         Cookie:3
+         None: "0",
+         LocalStorage: "1",
+         SessionStorage:"2",
+         Cookie:"3",
+         All:"4"
 };
 
 
@@ -112,15 +113,26 @@ function showMessage(trigger) {
         element.style.padding = "0";
     }, 1000);
 }
-
 function generateHtmlRows(keysToTrack) {
     var htmlRows = "";
     var copyButtonUrl = chrome.extension.getURL('Copy-15.png');
     $.each(keysToTrack, function(index, key) {
         if (key._isJson === true) {
             var jsonValue = "";
+            var value = "";
             var path = key._value;
-            var value = JSON.parse(localStorage.getItem(key._key));
+            if(key._type === selectedType.LocalStorage){
+              value = JSON.parse(localStorage.getItem(key._key));
+            }
+            if(key._type === selectedType.SessionStorage){
+              value = JSON.parse(sessionStorage.getItem(key._key));
+
+            }
+            if(key._type === selectedType.Cookie){
+                // get key from cookie
+                var regex = new RegExp("(?:(?:^|.*;\\s*)"+key._key+"\\s*\\=\\s*([^;]*).*$)|^.*$");
+                value = JSON.parse(document.cookie.replace(regex, "$1"));
+            }
             if (value !== null) {
                 jsonValue = Object.byString(value, key._value);
             } else {
@@ -135,7 +147,18 @@ function generateHtmlRows(keysToTrack) {
             htmlRows += htmlRow;
         } else {
             var keyHtml = "<p  style='margin:0'>" + key._key + "</p>";
-            var valueHtml = localStorage.getItem(key._key);
+            var valueHtml = "";
+            if(key._type === selectedType.LocalStorage){
+              valueHtml = localStorage.getItem(key._key);
+            }
+            if(key._type === selectedType.SessionStorage){
+              valueHtml = sessionStorage.getItem(key._key);
+
+            }
+            if(key._type === selectedType.Cookie){
+                var regex = new RegExp("(?:(?:^|.*;\\s*)"+key._key+"\\s*\\=\\s*([^;]*).*$)|^.*$");
+                valueHtml = document.cookie.replace(regex, "$1");
+            }
             var htmlRow = "<tr><td style='padding:3px 10px 0 10px'>" + keyHtml + "</td><td class='valueCell'style='padding:3px 5px 0 10px'>" +
                 "<input type='text' style='background:none;border:none;width: 100%' value='" + valueHtml + "'readonly/>" +
                 "</td>" +
@@ -145,6 +168,40 @@ function generateHtmlRows(keysToTrack) {
     });
     return htmlRows;
 }
+
+
+// function generateHtmlRows(keysToTrack) {
+//     var htmlRows = "";
+//     var copyButtonUrl = chrome.extension.getURL('Copy-15.png');
+//     $.each(keysToTrack, function(index, key) {
+//         if (key._isJson === true) {
+//             var jsonValue = "";
+//             var path = key._value;
+//             var value = JSON.parse(localStorage.getItem(key._key));
+//             if (value !== null) {
+//                 jsonValue = Object.byString(value, key._value);
+//             } else {
+//                 jsonValue = "parent is undefined";
+//             }
+//             var keyHtml = "<p style='margin:0'>" + key._value + "</p>";
+//             var valueHtml = jsonValue;
+//             var htmlRow = "<tr><td style='" + OVERLAY_TABLE_HEADER_STYLE + "'>" + keyHtml + "</td><td class='valueCell'style='padding:3px 5px 0 10px'>" +
+//                 "<input type='text' style='background:none;border:none;width: 100%' value='" + valueHtml + "'readonly/>" +
+//                 "</td>" +
+//                 "<td style='padding:0 10px 0 10px'><div id='copyToClipboard' style='" + OVERLAY_COPY_BUTTON_STYLE + "background:url(" + copyButtonUrl + ")'></div></td></tr>";
+//             htmlRows += htmlRow;
+//         } else {
+//             var keyHtml = "<p  style='margin:0'>" + key._key + "</p>";
+//             var valueHtml = localStorage.getItem(key._key);
+//             var htmlRow = "<tr><td style='padding:3px 10px 0 10px'>" + keyHtml + "</td><td class='valueCell'style='padding:3px 5px 0 10px'>" +
+//                 "<input type='text' style='background:none;border:none;width: 100%' value='" + valueHtml + "'readonly/>" +
+//                 "</td>" +
+//                 "<td style='padding:0 10px 0 10px'><div id='copyToClipboard' style='" + OVERLAY_COPY_BUTTON_STYLE + "background:url(" + copyButtonUrl + ")'></div></tr>";
+//             htmlRows += htmlRow;
+//         }
+//     });
+//     return htmlRows;
+// }
 
 function copyToClipboard(e) {
     $(e).parent().parent().find('.valueCell').find("input").select();
