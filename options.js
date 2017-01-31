@@ -69,6 +69,7 @@ function changeHandler(e) {
         $('.valuePathHeader').css("visibility","visible");
     } else {
         $(e.target).parent().parent().find('input[class^="value"]').hide();
+        $(e.target).parent().parent().find('input[class^="value"]').val("");
         if($('input[class^="value"]:visible').length === 0)
         {
           $('.valuePathHeader').css("visibility","hidden");
