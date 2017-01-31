@@ -1,4 +1,3 @@
-// Saves options to chrome.storage
 function save_options() {
     var localStorageKeys = [];
     var sessionStorageKeys = [];
@@ -18,7 +17,6 @@ function save_options() {
     chrome.storage.local.set({
         'keysToTrack': keysToTrack,
     }, function() {
-        // Update status to let user know options were saved.
         $("#saveMessage").show();
         setTimeout(function() {
           $("#saveMessage").hide();
@@ -58,9 +56,7 @@ function populateOptionsTable(storageKeys, tableToFill) {
         }
       });
     }
-
     showHideHeader();
-
 }
 
 function changeHandler(e) {
@@ -78,7 +74,6 @@ function changeHandler(e) {
 }
 
 function showHideHelp() {
-
     if ($("#helpTable").hasClass("hidden")) {
         $("#helpTable").show();
         $("#helpTable").removeClass("hidden");
@@ -116,10 +111,8 @@ function showHideHeader(){
 }
 function clear_options(e) {
     if (e.target.id === "clear") {
-        //show confirm div
         $("#confirmDiv").show();
     } else if (e.target.id === "cancelDelete") {
-        //hide confirm div
         $("#confirmDiv").fadeOut(100);
     } else if (e.target.id === "confirmDelete") {
         chrome.storage.local.clear();
@@ -131,9 +124,9 @@ function clear_options(e) {
         $(".keysToSave").hide().not(":first").remove();
         showHideHeader();
         showReminder();
-
     }
 }
+
 function delete_option(e){
   $(e.target).parent().parent().remove();
   showHideHeader();
