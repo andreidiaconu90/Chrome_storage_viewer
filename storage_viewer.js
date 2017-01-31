@@ -79,6 +79,7 @@ function displayOverlay(msg, sender, sendResponse) {
     });
     return true;
 }
+
 Object.byString = function(o, s) {
     s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
     s = s.replace(/^\./, ''); // strip a leading dot
@@ -116,7 +117,6 @@ function showMessage(trigger) {
 
 function generateHtmlRows(keysToTrack) {
     var htmlRows = "";
-    var copyButtonUrl = chrome.extension.getURL('Copy-15.png');
     $.each(keysToTrack, function(index, key) {
         if (key._isJson === true) {
             var jsonValue = "";
@@ -128,19 +128,11 @@ function generateHtmlRows(keysToTrack) {
                 jsonValue = "parent is undefined";
             }
             var keyHtml = "<p style='margin:0'>" + key._value + "</p>";
-            var htmlRow = "<tr><td style='" + OVERLAY_TABLE_HEADER_STYLE + "'>" + keyHtml + "</td><td class='valueCell'style='padding:3px 5px 0 10px'>" +
-                "<input type='text' style='background:none;border:none;width: 100%' value='" + jsonValue + "'readonly/>" +
-                "</td>" +
-                "<td style='padding:0 10px 0 10px'><div id='copyToClipboard' style='" + OVERLAY_COPY_BUTTON_STYLE + "background:url(" + copyButtonUrl + ")'></div></td></tr>";
-            htmlRows += htmlRow;
+            htmlRows += generateHtml(keyHtml,jsonValue);
         } else {
             var keyHtml = "<p  style='margin:0'>" + key._key + "</p>";
             var valueHtml = getItemFromStorage(key);
-            var htmlRow = "<tr><td style='padding:3px 10px 0 10px'>" + keyHtml + "</td><td class='valueCell'style='padding:3px 5px 0 10px'>" +
-                "<input type='text' style='background:none;border:none;width: 100%' value='" + valueHtml + "'readonly/>" +
-                "</td>" +
-                "<td style='padding:0 10px 0 10px'><div id='copyToClipboard' style='" + OVERLAY_COPY_BUTTON_STYLE + "background:url(" + copyButtonUrl + ")'></div></tr>";
-            htmlRows += htmlRow;
+            htmlRows += generateHtml(keyHtml,valueHtml);
         }
     });
     return htmlRows;
@@ -176,6 +168,22 @@ function getItemFromStorage(key){
   }
   return value;
 }
+
+function generateHtml(keyHtml,valueHtml)
+{
+  var copyButtonUrl = chrome.extension.getURL('Copy-15.png');
+  var html= " "+
+  "<tr>"+
+    "<td style='" + OVERLAY_TABLE_HEADER_STYLE + "'>" + keyHtml + "</td><td class='valueCell'style='padding:3px 5px 0 10px'>" +
+      "<input type='text' style='background:none;border:none;width: 100%' value='" + valueHtml + "'readonly/>" +
+    "</td>" +
+    "<td style='padding:0 10px 0 10px'>"+
+      "<div id='copyToClipboard' style='" + OVERLAY_COPY_BUTTON_STYLE + "background:url(" + copyButtonUrl + ")'></div>"+
+    "</td>"+
+  "</tr>";
+  return html;
+}
+
 function copyToClipboard(e) {
     $(e).parent().parent().find('.valueCell').find("input").select();
     document.execCommand('copy');
