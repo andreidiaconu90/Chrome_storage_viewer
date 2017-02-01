@@ -7,7 +7,7 @@ const EXTENSION_OVERLAY_HTML = '<div id="extensionOverlay"' +
     'font-family: sans-serif !important;' +
     'font-weight: bold !important;' +
     'border-radius:10px !important;' +
-    'font-family:Helvetica !important;'+
+    'font-family:Helvetica !important;' +
     'background: rgba(54, 25, 25, .5) !important;z-index: 888888888888  !important;"></div>';
 const NO_OPTIONS_CONFIGURED = '<p style="padding: 8px 5px 0 5px;!important">No options defined.<br/>Right click on the extension icon and click Options</p>'
 const OVERLAY_TABLE_STYLE = "margin-top:7px !important;margin-bottom:7px !important";
@@ -17,11 +17,11 @@ const OVERLAY_REFRESH_BUTTON_STYLE = "width:20px !important;height:20px !importa
 const OVERLAY_COPY_BUTTON_STYLE = "width:15px;height:15px;display:block;cursor:pointer;";
 
 var selectedType = {
-         None: "0",
-         LocalStorage: "1",
-         SessionStorage:"2",
-         Cookie:"3",
-         All:"4"
+    None: "0",
+    LocalStorage: "1",
+    SessionStorage: "2",
+    Cookie: "3",
+    All: "4"
 };
 
 
@@ -44,7 +44,6 @@ document.addEventListener("click", function(event) {
         showMessage("copy");
     } else if (element.id === "removeKey") {
         removeKey(element);
-        showMessage("copy");
     }
 });
 
@@ -69,7 +68,7 @@ function displayOverlay(msg, sender, sendResponse) {
     } else {
         var refreshButtonUrl = chrome.extension.getURL('Refresh-20.png');
         var table = '<table style="' + OVERLAY_TABLE_STYLE + '"><tr style="' + OVERLAY_TABLE_ROW_STYLE + '">' +
-            '<th></th>'+
+            '<th></th>' +
             '<th style="' + OVERLAY_TABLE_HEADER_STYLE + '">Key</th>' +
             '<th style="' + OVERLAY_TABLE_HEADER_STYLE + '">Value</th>' +
             '<th style="padding-right:8px !important"><div style="' + OVERLAY_REFRESH_BUTTON_STYLE + ';background:url(' + refreshButtonUrl + ');"id="Refresh"></div></th>' +
@@ -133,115 +132,113 @@ function generateHtmlRows(keysToTrack) {
                 jsonValue = "parent is undefined";
             }
             var keyHtml = "<p style='margin:0'>" + key._value + "</p>";
-            htmlRows += generateHtml(keyHtml,jsonValue,false,key._type);
+            htmlRows += generateHtml(keyHtml, jsonValue, false, key._type);
         } else {
             var keyHtml = "<p  style='margin:0'>" + key._key + "</p>";
             var valueHtml = getItemFromStorage(key);
-            htmlRows += generateHtml(keyHtml,valueHtml,true,key._type);
+            if (key._type === selectedType.Cookie || key._type === selectedType.All) {
+                htmlRows += generateHtml(keyHtml, valueHtml, false, key._type);
+            } else {
+                htmlRows += generateHtml(keyHtml, valueHtml, true, key._type);
+            }
         }
     });
     return htmlRows;
 }
 
-function getItemFromStorage(key){
-  var value="";
-  if(key._type === selectedType.LocalStorage){
-    value = localStorage.getItem(key._key);
-  }
-  if(key._type === selectedType.SessionStorage){
-    value = sessionStorage.getItem(key._key);
+function getItemFromStorage(key) {
+    var value = "";
+    if (key._type === selectedType.LocalStorage) {
+        value = localStorage.getItem(key._key);
+    }
+    if (key._type === selectedType.SessionStorage) {
+        value = sessionStorage.getItem(key._key);
 
-  }
-  if(key._type === selectedType.Cookie){
-      var regex = new RegExp("(?:(?:^|.*;\\s*)"+key._key+"\\s*\\=\\s*([^;]*).*$)|^.*$");
-      value = document.cookie.replace(regex, "$1");
-  }
-  if(key._type === selectedType.All)
-  { //if All is selected look in all storage locations and return the first key to match
-     if(localStorage.getItem(key._key) !== null)
-     {
-       value = localStorage.getItem(key._key);
-     }
-     else if(sessionStorage.getItem(key._key) !== null)
-     {
-       value = sessionStorage.getItem(key._key);
-     }else
-     {
-       var regex = new RegExp("(?:(?:^|.*;\\s*)"+key._key+"\\s*\\=\\s*([^;]*).*$)|^.*$");
-       value = document.cookie.replace(regex, "$1");
-     }
-  }
-  return value;
+    }
+    if (key._type === selectedType.Cookie) {
+        var regex = new RegExp("(?:(?:^|.*;\\s*)" + key._key + "\\s*\\=\\s*([^;]*).*$)|^.*$");
+        value = document.cookie.replace(regex, "$1");
+    }
+    if (key._type === selectedType.All) { //if All is selected look in all storage locations and return the first key to match
+        if (localStorage.getItem(key._key) !== null) {
+            value = localStorage.getItem(key._key);
+        } else if (sessionStorage.getItem(key._key) !== null) {
+            value = sessionStorage.getItem(key._key);
+        } else {
+            var regex = new RegExp("(?:(?:^|.*;\\s*)" + key._key + "\\s*\\=\\s*([^;]*).*$)|^.*$");
+            value = document.cookie.replace(regex, "$1");
+        }
+    }
+    return value;
 }
 
-function generateHtml(keyHtml,valueHtml,showDelete,keyLocation)
-{
-  var copyButtonUrl = chrome.extension.getURL('Copy-15.png');
-  var deleteButtonUrl = chrome.extension.getURL('Delete-15.png');
-  var html= " "+
-    "<td style='" + OVERLAY_TABLE_HEADER_STYLE + "'>" + keyHtml + "</td><td class='valueCell'style='padding:3px 5px 0 10px'>" +
-      "<input type='text' style='background:none;border:none;width: 100%;color:white !important;font-family:Helvetica !important'; value='" + valueHtml + "'readonly/>" +
-    "</td>" +
-    "<td style='padding:0 10px 0 10px'>"+
-      "<div id='copyToClipboard' style='" + OVERLAY_COPY_BUTTON_STYLE + "background:url(" + copyButtonUrl + ")'></div>"+
-    "</td>"+
-    "<td style='display:none'><p class='keyLocation'>"+keyLocation+"</p></td>";
+function generateHtml(keyHtml, valueHtml, showDelete, keyLocation) {
+    var copyButtonUrl = chrome.extension.getURL('Copy-15.png');
+    var deleteButtonUrl = chrome.extension.getURL('Delete-15.png');
+    var html = " " +
+        "<td style='" + OVERLAY_TABLE_HEADER_STYLE + "'>" + keyHtml + "</td><td class='valueCell'style='padding:3px 5px 0 10px'>" +
+        "<input type='text' style='background:none;border:none;width: 100%;color:white !important;font-family:Helvetica !important'; value='" + valueHtml + "'readonly/>" +
+        "</td>" +
+        "<td style='padding:0 10px 0 10px'>" +
+        "<div id='copyToClipboard' style='" + OVERLAY_COPY_BUTTON_STYLE + "background:url(" + copyButtonUrl + ")'></div>" +
+        "</td>" +
+        "<td style='display:none'><p class='keyLocation'>" + keyLocation + "</p></td>";
 
-  if(showDelete)
-  {
-    var button ="<td style='padding:0 10px 0 10px'>"+
-          "<div id='removeKey' style='" + OVERLAY_COPY_BUTTON_STYLE + "background:url(" + deleteButtonUrl + ")'></div>"+
-        "</td>";
-      html = button + html;
-  }else
-  {
-    var button = "<td>&nbsp;</td>"
-    html = button + html;
-  }
-  html = "<tr>" + html + "<tr>";
-  return html;
+    if (showDelete) {
+        var button = "<td style='padding:0 10px 0 10px'>" +
+            "<div id='removeKey' style='" + OVERLAY_COPY_BUTTON_STYLE + "background:url(" + deleteButtonUrl + ")'></div>" +
+            "</td>";
+        html = button + html;
+    } else {
+        var button = "<td>&nbsp;</td>"
+        html = button + html;
+    }
+    html = "<tr>" + html + "<tr>";
+    return html;
 }
-function removeKey(e)
-{
-  var keyToRemove = $(e).parent().parent().find("p:not(.keyLocation)").text();
-  var keyLocation = $(e).parent().parent().find("p.keyLocation").text();
-  if(keyLocation == selectedType.LocalStorage)
-  {
-      localStorage.removeItem(keyToRemove);
-      var savedKeys = [];
-      var keysToRemove = [];
-      chrome.storage.local.get(['keysToTrack'], function(result) {
-        savedKeys = result.keysToTrack;
-        $.each(savedKeys,function(index, key)
-        {
-            if(key._key === keyToRemove && key._type === keyLocation)
-            {
-              keysToRemove.push(index);
-            }
-      });
-    });
-     $.each(keysToRemove,function(index,key){
-        savedKeys.splice(key,1);
-     });
-     chrome.storage.local.set({
-         'keysToTrack': savedKeys,
-     });
-  }
-  if(keyLocation == selectedType.SessionStorage)
-  {
-      sessionStorage.removeItem(keyToRemove);
-  }
-  if(keyLocation == selectedType.Cookie)
-  {
 
-  }
-  if(keyLocation == selectedType.All)
-  {
-
-  }
+function removeKey(e) {
+    var keyToRemove = $(e).parent().parent().find("p:not(.keyLocation)").text();
+    var keyLocation = $(e).parent().parent().find("p.keyLocation").text();
+    if (keyLocation == selectedType.LocalStorage) {
+        localStorage.removeItem(keyToRemove);
+    }
+    if (keyLocation == selectedType.SessionStorage) {
+        sessionStorage.removeItem(keyToRemove);
+    }
+    $("#Refresh").click();
 }
+
 function copyToClipboard(e) {
     $(e).parent().parent().find('.valueCell').find("input").select();
     document.execCommand('copy');
     $(e).parent().parent().find('.valueCell').find("input").blur();
 }
+
+//do not remove as it caould be useful in the future
+// function refreshSavedOptionsAndRefreshOverlay(keyToRemove, keyLocation) {
+//     var savedKeys = [];
+//     var keysToRemove = [];
+//     chrome.storage.local.get('keysToTrack', function(result) {
+//         savedKeys = result.keysToTrack;
+//         $.each(result.keysToTrack, function(index, key) {
+//             if (key._key === keyToRemove && key._type === keyLocation) {
+//                 keysToRemove.push(index);
+//             }
+//         });
+//         $.each(keysToRemove, function(index, key) {
+//             savedKeys.splice(key, 1);
+//         });
+//         chrome.storage.local.set({
+//             'keysToTrack': savedKeys,
+//         }, function() {
+//             var result = {
+//                 extensionState: "open",
+//                 keysToTrack: savedKeys
+//             }
+//             displayOverlay(result, undefined, 'isRefresh');
+//         });
+//
+//     });
+//
+// }
