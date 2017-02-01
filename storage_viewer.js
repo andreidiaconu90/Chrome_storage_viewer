@@ -237,32 +237,37 @@ function editValue(e) {
     $(editedInput).focus().select();
 }
 
-function saveUpdatedValue(e)
-{
-  var editedInput = $(e).parent().parent().find('input[class="inputValue"]');
-  var newValue = $(editedInput).val();
-  var editedKey = $(e).parent().parent().find('p.key').text();
-  var keylocation = $(e).parent().parent().find('p.keyLocation').text();
-  if(keylocation === selectedType.LocalStorage)
-  {
-    //if key exist
-      localStorage.setItem(editedKey,newValue);
-    //create key with new value and add it to keyToTrack
-  }
-  if(keylocation === selectedType.SessionStorage)
-  {
-      sessionStorage.setItem(editedKey,newValue);
-  }
-  if(keylocation === selectedType.Cookie)
-  {
-
-  }
-  if(keylocation === selectedType.All)
-  {
-
-  }
-  $(editedInput).attr('style',VALUE_INPUT_STYLE);
-  $('#Refresh').click();
+function saveUpdatedValue(e) {
+    var editedInput = $(e).parent().parent().find('input[class="inputValue"]');
+    var newValue = $(editedInput).val();
+    var editedKey = $(e).parent().parent().find('p.key').text();
+    var keylocation = $(e).parent().parent().find('p.keyLocation').text();
+    if (keylocation === selectedType.LocalStorage) {
+        //if key exist
+        localStorage.setItem(editedKey, newValue);
+        //create key with new value and add it to keyToTrack
+    }
+    if (keylocation === selectedType.SessionStorage) {
+        sessionStorage.setItem(editedKey, newValue);
+    }
+    if (keylocation === selectedType.Cookie) {
+        document.cookie = editedKey + "=" + newValue;
+    }
+    if (keylocation === selectedType.All) {
+        if (localStorage.getItem(editedKey) !== null) {
+            localStorage.setItem(editedKey, newValue);
+        } else if (sessionStorage.getItem(editedKey) !== null) {
+            sessionStorage.setItem(editedKey, newValue);
+        } else {
+            var regex = new RegExp("(?:(?:^|.*;\\s*)" + editedKey + "\\s*\\=\\s*([^;]*).*$)|^.*$");
+            value = document.cookie.replace(regex, "$1");
+            if (value !== null) {
+                document.cookie = editedKey + "=" + newValue;
+            }
+        }
+    }
+    $(editedInput).attr('style', VALUE_INPUT_STYLE);
+    $('#Refresh').click();
 }
 
 //do not remove as it caould be useful in the future
