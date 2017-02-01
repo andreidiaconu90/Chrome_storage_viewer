@@ -243,9 +243,7 @@ function saveUpdatedValue(e) {
     var editedKey = $(e).parent().parent().find('p.key').text();
     var keylocation = $(e).parent().parent().find('p.keyLocation').text();
     if (keylocation === selectedType.LocalStorage) {
-        //if key exist
         localStorage.setItem(editedKey, newValue);
-        //create key with new value and add it to keyToTrack
     }
     if (keylocation === selectedType.SessionStorage) {
         sessionStorage.setItem(editedKey, newValue);
