@@ -26,7 +26,6 @@
         "js": [
             "js/jquery.min.js",
             "storage_viewer.js"
-
         ]
     }],
     "web_accessible_resources": [

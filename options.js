@@ -73,21 +73,6 @@ function changeHandler(e) {
     }
 }
 
-function showHideHelp() {
-    if ($("#helpTable").hasClass("hidden")) {
-        $("#helpTable").show();
-        $("#helpTable").removeClass("hidden");
-        $("#helpTable").addClass("visible");
-        return;
-    }
-    if ($("#helpTable").hasClass("visible")) {
-        $("#helpTable").hide();
-        $("#helpTable").removeClass("visible");
-        $("#helpTable").addClass("hidden");
-        return;
-    }
-}
-
 function addRow() {
     var row = $("#keysForm").find(".keysToSave").eq(0).clone();
     $(row).find("input").val("");
@@ -139,15 +124,49 @@ function showReminder(){
       $("#saveReminder").hide()
   }, 3000);
 }
+function tabSwitch(e) {
+    // Declare all variables
+    var tabName = "";
+  if(e.target.id === "HelpTab")
+  {
+    tabName = "Help";
+  }
+  if(e.target.id === "OptionsTab")
+  {
+    tabName = "Options";
+  }
+    var i, tabcontent, tablinks;
+
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the link that opened the tab
+    document.getElementById(tabName).style.display = "block";
+    var activeElement = document.querySelector(".active");
+    if(activeElement){
+    activeElement.classList.remove("active");
+    }
+    e.currentTarget.className += " active";
+}
 
 document.addEventListener('DOMContentLoaded', restore_options);
-document.getElementById('RestoreOptions').addEventListener('click', restore_options);
 document.getElementById('save').addEventListener('click', save_options);
 document.getElementById('clear').addEventListener('click', clear_options);
 document.getElementById('confirmDelete').addEventListener('click', clear_options);
 document.getElementById('cancelDelete').addEventListener('click', clear_options);
-document.getElementById('showHideHelp').addEventListener('click', showHideHelp);
 document.getElementById('addRow').addEventListener('click', addRow);
+document.getElementById('OptionsTab').addEventListener('click', tabSwitch);
+document.getElementById('HelpTab').addEventListener('click', tabSwitch);
+document.getElementById('OptionsTab').click();
 document.addEventListener('DOMContentLoaded', function() {
     var checkboxes = document.querySelectorAll('.isJson');
     for (var i = 0; i < checkboxes.length; i++) {

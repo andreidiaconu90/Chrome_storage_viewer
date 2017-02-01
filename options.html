@@ -8,147 +8,165 @@
 </head>
 
 <body>
-    <a href="#" id="showHideHelp">Show help!</a>
-    <table id="helpTable" class="hidden" style="display:none">
-        <tr>
-            <th>Example of tracking a value that's inside a JSON object:</th>
-        </tr>
-        <tr>
-            <td>Key = StorageKeyName</td>
-        </tr>
-        <tr>
-            <td>IsJson = checked</td>
-        </tr>
-        <tr>
-            <td>Value = Parent[0].Child[1].SomeProperty</td>
-        </tr>
-        <tr>
-          <td>Type = Session storage</td>
-        </tr>
-        <tr>
-            <th>After you save, this option will return the 'SomeProperty' value of the second Child' of the first 'Parent' inside the value of the 'StorageKeyName' key from the Session storage.</th>
-        </tr>
-        <tr>&nbsp;</tr>
-        <tr>&nbsp;</tr>
-    </table>
-    <table id="keysForm" style="table-layout:fixed;">
-      <thead>
-        <tr class="headerRow" style="display:none">
-            <th>
-                Key
-            </th>
-            <th style="width: 32px;">
-                Json
-            </th>
-            <th class="valuePathHeader"style="visibility:hidden">
-                Path
-            </th>
-            <th class="typeHeader">
-                Storage type
-            </th>
-        </tr>
-      </thead>
-        <tbody>
-          <tr class="keysToSave">
-              <td>
-                  <input class="key" type="text" value="" />
-              </td>
-              <td style="text-align:center;width: 32px;">
-                  <input class="isJson" type="checkbox" style="text-align:center" />
-              </td>
-              <td>
-                  <input class="value" type="text" value="" style="display:none" />
-              </td>
-              <td>
-                <div>
-                  <select>
-                    <option value="1">Local storage</option>
-                    <option value="2">Session storage</option>
-                    <option value="3">Cookie data</option>
-                    <option value="4">All</option>
-                  </select>
-                </div>
-              </td>
-              <td>
-                <div class="deleteOption" style='width:20px;height:20px;display:block;background:url("/Delete-20-black.png");cursor:pointer'></div>
-              </td>
-          </tr>
-          <tr class="keysToSave">
-              <td>
-                  <input class="key" type="text" value="" />
-              </td>
-              <td style="text-align:center;width: 32px;">
-                  <input class="isJson" type="checkbox" style="text-align:center" />
-              </td>
-              <td>
-                  <input class="value" type="text" value="" style="display:none" />
-              </td>
-              <td>
-                <div>
-                  <select>
-                    <option value="1">Local storage</option>
-                    <option value="2">Session storage</option>
-                    <option value="3">Cookie data</option>
-                    <option value="4">All</option>
-                  </select>
-                </div>
-              </td>
-              <td>
-                <div class="deleteOption" style='width:20px;height:20px;display:block;background:url("/Delete-20-black.png");cursor:pointer'></div>
-              </td>
-          </tr>
-          <tr class="keysToSave">
-              <td>
-                  <input class="key" type="text" value="" />
-              </td>
-              <td style="text-align:center;width: 32px;">
-                  <input class="isJson" type="checkbox" style="text-align:center" />
-              </td>
-              <td>
-                  <input class="value" type="text" value="" style="display:none" />
-              </td>
-              <td>
-                <div>
-                  <select>
-                    <option value="1">Local storage</option>
-                    <option value="2">Session storage</option>
-                    <option value="3">Cookie data</option>
-                    <option value="4">All</option>
-                  </select>
-                </div>
-              </td>
-              <td>
-                <div class="deleteOption" style='width:20px;height:20px;display:block;background:url("/Delete-20-black.png");cursor:pointer'></div>
-              </td>
-          </tr>
-        </tbody>
-    </table>
-
-    <div id="status"></div>
-    <div style="padding-top:10px;">
-        <div style="display: inline;float: right;padding-bottom: 15px;">
-            <button id="save">Save</button>
-            <button id="clear">Clear All</button>
+    <ul class="tab">
+        <li><a href="#" id="OptionsTab">Options</a></li>
+        <li><a href="#" id="HelpTab">Help</a></li>
+    </ul>
+    <div id="Options" class="tabcontent" style="width:508px">
+        <table id="keysForm" style="table-layout:fixed;">
+            <thead>
+                <tr class="headerRow" style="display:none">
+                    <th>
+                        Key
+                    </th>
+                    <th style="width: 32px;">
+                        Json
+                    </th>
+                    <th class="valuePathHeader" style="visibility:hidden">
+                        Path
+                    </th>
+                    <th class="typeHeader">
+                        Storage type
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="keysToSave">
+                    <td>
+                        <input class="key" type="text" value="" />
+                    </td>
+                    <td style="text-align:center;width: 32px;">
+                        <input class="isJson" type="checkbox" style="text-align:center" />
+                    </td>
+                    <td>
+                        <input class="value" type="text" value="" style="display:none" />
+                    </td>
+                    <td>
+                        <div>
+                            <select>
+                            <option value="1">Local storage</option>
+                            <option value="2">Session storage</option>
+                            <option value="3">Cookie data</option>
+                            <option value="4">All</option>
+                          </select>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="deleteOption" style='width:20px;height:20px;display:block;background:url("/Delete-20-black.png");cursor:pointer'></div>
+                    </td>
+                </tr>
+                <tr class="keysToSave">
+                    <td>
+                        <input class="key" type="text" value="" />
+                    </td>
+                    <td style="text-align:center;width: 32px;">
+                        <input class="isJson" type="checkbox" style="text-align:center" />
+                    </td>
+                    <td>
+                        <input class="value" type="text" value="" style="display:none" />
+                    </td>
+                    <td>
+                        <div>
+                            <select>
+                            <option value="1">Local storage</option>
+                            <option value="2">Session storage</option>
+                            <option value="3">Cookie data</option>
+                            <option value="4">All</option>
+                          </select>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="deleteOption" style='width:20px;height:20px;display:block;background:url("/Delete-20-black.png");cursor:pointer'></div>
+                    </td>
+                </tr>
+                <tr class="keysToSave">
+                    <td>
+                        <input class="key" type="text" value="" />
+                    </td>
+                    <td style="text-align:center;width: 32px;">
+                        <input class="isJson" type="checkbox" style="text-align:center" />
+                    </td>
+                    <td>
+                        <input class="value" type="text" value="" style="display:none" />
+                    </td>
+                    <td>
+                        <div>
+                            <select>
+                            <option value="1">Local storage</option>
+                            <option value="2">Session storage</option>
+                            <option value="3">Cookie data</option>
+                            <option value="4">All</option>
+                          </select>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="deleteOption" style='width:20px;height:20px;display:block;background:url("/Delete-20-black.png");cursor:pointer'></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div id="status"></div>
+        <div style="padding-top:10px;">
+            <div style="display: inline;float: right;padding-bottom: 15px;">
+                <button id="save">Save</button>
+                <button id="clear">Clear All</button>
+            </div>
+            <button id="addRow" style="float:left">Add Row</button>
+            <!-- <button id="RestoreOptions">Restore options</button> -->
         </div>
-        <button id="addRow" style="float:left">Add Row</button>
-        <button id="RestoreOptions">Restore options</button>
+        <div id="confirmDiv" style="display:none;clear:both;">
+            <p style="color:red">
+                Are you sure you want to delete all saved options?
+            </p>
+            <button id="confirmDelete">Yes</button>
+            <button id="cancelDelete">No</button>
+        </div>
+        <div id="saveReminder" style="display:none;clear:both;">
+            <p style="color:orange">
+                Don't forget to <b>Save</b> after removing options.
+            </p>
+        </div>
+        <div id="saveMessage" style="display:none;clear:both;">
+            <p style="color:green">
+                Saved!
+            </p>
+        </div>
     </div>
-    <div id="confirmDiv" style="display:none;clear:both;">
-        <p style="color:red">
-            Are you sure you want to delete all saved options?
-        </p>
-        <button id="confirmDelete">Yes</button>
-        <button id="cancelDelete">No</button>
-    </div>
-    <div id="saveReminder"style="display:none;clear:both;">
-      <p style="color:orange">
-        Don't forget to <b>Save</b> after removing options.
-      </p>
-    </div>
-    <div id="saveMessage"style="display:none;clear:both;">
-      <p style="color:green">
-        Saved!
-      </p>
+
+    <div id="Help" class="tabcontent" style="width:508px">
+        <div class="helpExample">
+            <h1>Example</h1>
+            <ul style="list-style: none;">
+                <li><b>Key</b> = StorageKeyName</li>
+                <li><b>IsJson</b> = checked</li>
+                <li><b>Value</b> = Parent[0].Child[1].SomeProperty</li>
+                <li><b>Type</b> = Session storage</li>
+            </ul>
+            <p>After you save, this option will return the 'SomeProperty' value of the second Child' of the first 'Parent' inside the value of the 'StorageKeyName' key from the Session storage.</p>
+        </div>
+        <div class="helpTypes">
+            <h1>Storage Type</h1>
+            <ul style="list-style: none;">
+                <li><b>Local storage</b> search for the key in Local Storage</li>
+                <li><b>Session storage</b> search for the key in Session Storage</li>
+                <li><b>Cookie data</b> search for the key in Cookies</li>
+                <li><b>All</b> search for the key all above storage locations and return the first matching key</li>
+            </ul>
+            <p>Specifying the <b>Storage type</b> will enable you to keep track of multiple keys with the same name but in different storages</p>
+        </div>
+        <div class="editHelp">
+            <h1>Edit a value</h1>
+            <p>Clicking on the <b>Edit</b> button(pencil icon) will make the 'Value' field editable and it will enable you to edit the value of a key(in storage). After you finish typing the new value you must hit <b>Enter</b> to save the new value.</p>
+        </div>
+        <div class="deleteHelp">
+            <h1>Delete a key</h1>
+            <p>Clicking on the <b>Delete</b> button (trash icon) will remove the corresponding key from storage. Currently deleting a key is only available for keys whose values are
+                <b>not</b> extracted from a JSON object and are located in either Local Storage or Session Storage</p>
+        </div>
+        <div class="copyHelp">
+            <h1>Copy a value</h1>
+            <p>Clicking on the <b>Copy</b> button (file icon) will copy the corresponding value inside the clipboard.
+        </div>
     </div>
     <script src="options.js"></script>
     <script src="js/jquery.min.js"></script>
