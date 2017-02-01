@@ -15,7 +15,7 @@ const OVERLAY_TABLE_ROW_STYLE = "border-bottom:1pt solid white !important";
 const OVERLAY_TABLE_HEADER_STYLE = "padding:3px 10px 0 10px !important";
 const OVERLAY_REFRESH_BUTTON_STYLE = "width:20px !important;height:20px !important;display:block !important;float: right !important;cursor:pointer !important;";
 const OVERLAY_COPY_BUTTON_STYLE = "width:15px;height:15px;display:block;cursor:pointer;";
-
+const VALUE_INPUT_STYLE = "background:none;border:none;width: 100%;color:white !important;font-family:Helvetica !important;";
 var selectedType = {
     None: "0",
     LocalStorage: "1",
@@ -28,6 +28,15 @@ var selectedType = {
 chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
     displayOverlay(msg, sender, sendResponse);
 });
+
+document.addEventListener("keypress", function(event) {
+    var key = event.which || event.keyCode;
+    var element = event.target;
+    if (element.className === "inputValue" && key === 13) {
+        saveUpdatedValue(element);
+    }
+});
+
 document.addEventListener("click", function(event) {
     var element = event.target;
     if (element.id == "Refresh") {
@@ -39,11 +48,13 @@ document.addEventListener("click", function(event) {
                 showMessage("refresh");
             }
         });
-    } else if (element.id === "copyToClipboard") {
+    } else if (element.className === "copyToClipboard") {
         copyToClipboard(element);
         showMessage("copy");
-    } else if (element.id === "removeKey") {
+    } else if (element.className === "removeKey") {
         removeKey(element);
+    } else if (element.className === "editValue") {
+        editValue(element);
     }
 });
 
@@ -71,6 +82,7 @@ function displayOverlay(msg, sender, sendResponse) {
             '<th></th>' +
             '<th style="' + OVERLAY_TABLE_HEADER_STYLE + '">Key</th>' +
             '<th style="' + OVERLAY_TABLE_HEADER_STYLE + '">Value</th>' +
+            '<th></th>' +
             '<th style="padding-right:8px !important"><div style="' + OVERLAY_REFRESH_BUTTON_STYLE + ';background:url(' + refreshButtonUrl + ');"id="Refresh"></div></th>' +
             '</tr>' + htmlRows +
             '</table><i id="refreshMessage" style="display=none;"></i>' +
@@ -131,10 +143,10 @@ function generateHtmlRows(keysToTrack) {
             } else {
                 jsonValue = "parent is undefined";
             }
-            var keyHtml = "<p style='margin:0'>" + key._value + "</p>";
+            var keyHtml = "<p class='key' style='margin:0'>" + key._value + "</p>";
             htmlRows += generateHtml(keyHtml, jsonValue, false, key._type);
         } else {
-            var keyHtml = "<p  style='margin:0'>" + key._key + "</p>";
+            var keyHtml = "<p class='key' style='margin:0'>" + key._key + "</p>";
             var valueHtml = getItemFromStorage(key);
             if (key._type === selectedType.Cookie || key._type === selectedType.All) {
                 htmlRows += generateHtml(keyHtml, valueHtml, false, key._type);
@@ -175,18 +187,22 @@ function getItemFromStorage(key) {
 function generateHtml(keyHtml, valueHtml, showDelete, keyLocation) {
     var copyButtonUrl = chrome.extension.getURL('Copy-15.png');
     var deleteButtonUrl = chrome.extension.getURL('Delete-15.png');
+    var editButtonUrl = chrome.extension.getURL('Edit-15.png');
     var html = " " +
         "<td style='" + OVERLAY_TABLE_HEADER_STYLE + "'>" + keyHtml + "</td><td class='valueCell'style='padding:3px 5px 0 10px'>" +
-        "<input type='text' style='background:none;border:none;width: 100%;color:white !important;font-family:Helvetica !important'; value='" + valueHtml + "'readonly/>" +
+        "<input type='text'class='inputValue' style='" + VALUE_INPUT_STYLE + "'; value='" + valueHtml + "'readonly/>" +
         "</td>" +
         "<td style='padding:0 10px 0 10px'>" +
-        "<div id='copyToClipboard' style='" + OVERLAY_COPY_BUTTON_STYLE + "background:url(" + copyButtonUrl + ")'></div>" +
+        "<div class='editValue' style='" + OVERLAY_COPY_BUTTON_STYLE + "background:url(" + editButtonUrl + ")'></div>" +
+        "</td>" +
+        "<td style='padding:0 10px 0 10px'>" +
+        "<div class='copyToClipboard' style='" + OVERLAY_COPY_BUTTON_STYLE + "background:url(" + copyButtonUrl + ")'></div>" +
         "</td>" +
         "<td style='display:none'><p class='keyLocation'>" + keyLocation + "</p></td>";
 
     if (showDelete) {
         var button = "<td style='padding:0 10px 0 10px'>" +
-            "<div id='removeKey' style='" + OVERLAY_COPY_BUTTON_STYLE + "background:url(" + deleteButtonUrl + ")'></div>" +
+            "<div class='removeKey' style='" + OVERLAY_COPY_BUTTON_STYLE + "background:url(" + deleteButtonUrl + ")'></div>" +
             "</td>";
         html = button + html;
     } else {
@@ -213,6 +229,40 @@ function copyToClipboard(e) {
     $(e).parent().parent().find('.valueCell').find("input").select();
     document.execCommand('copy');
     $(e).parent().parent().find('.valueCell').find("input").blur();
+}
+
+function editValue(e) {
+    var editedInput = $(e).parent().parent().find('input[readonly]');
+    $(editedInput).removeAttr('style').attr("readonly", false).css('color', 'black');
+    $(editedInput).focus().select();
+}
+
+function saveUpdatedValue(e)
+{
+  var editedInput = $(e).parent().parent().find('input[class="inputValue"]');
+  var newValue = $(editedInput).val();
+  var editedKey = $(e).parent().parent().find('p.key').text();
+  var keylocation = $(e).parent().parent().find('p.keyLocation').text();
+  if(keylocation === selectedType.LocalStorage)
+  {
+    //if key exist
+      localStorage.setItem(editedKey,newValue);
+    //create key with new value and add it to keyToTrack
+  }
+  if(keylocation === selectedType.SessionStorage)
+  {
+      sessionStorage.setItem(editedKey,newValue);
+  }
+  if(keylocation === selectedType.Cookie)
+  {
+
+  }
+  if(keylocation === selectedType.All)
+  {
+
+  }
+  $(editedInput).attr('style',VALUE_INPUT_STYLE);
+  $('#Refresh').click();
 }
 
 //do not remove as it caould be useful in the future
