@@ -34,6 +34,9 @@ chrome.runtime.onInstalled.addListener(function(object) {
                         "_type": "4"
                     }
                     keysToSave.push(newKey);
+                }else
+                {
+                  keysToSave.push(key);
                 }
             });
             chrome.storage.local.set({

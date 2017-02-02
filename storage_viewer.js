@@ -71,6 +71,7 @@ function displayOverlay(msg, sender, sendResponse) {
         $("#extensionOverlay").remove();
     }
     $($.parseHTML(extensionOverlay)).appendTo('body');
+    injectBalloons();
     var htmlRows = generateHtmlRows(msg.keysToTrack);
 
     if ((msg.keysToTrack === undefined || msg.keysToTrack.length === 0) && htmlRows === "") {
@@ -190,7 +191,7 @@ function generateHtml(keyHtml, valueHtml, showDelete, keyLocation) {
     var editButtonUrl = chrome.extension.getURL('Edit-15.png');
     var html = " " +
         "<td style='" + OVERLAY_TABLE_HEADER_STYLE + "'>" + keyHtml + "</td><td class='valueCell'style='padding:3px 5px 0 10px'>" +
-        "<input type='text'class='inputValue' style='" + VALUE_INPUT_STYLE + "'; value='" + valueHtml + "'readonly/>" +
+        "<input type='text'class='inputValue' style='" + VALUE_INPUT_STYLE + "'; value='" + valueHtml + "'readonly />" +
         "</td>" +
         "<td style='padding:0 10px 0 10px'>" +
         "<div class='editValue' style='" + OVERLAY_COPY_BUTTON_STYLE + "background:url(" + editButtonUrl + ")'></div>" +
@@ -234,6 +235,7 @@ function copyToClipboard(e) {
 function editValue(e) {
     var editedInput = $(e).parent().parent().find('input[readonly]');
     $(editedInput).removeAttr('style').attr("readonly", false).css('color', 'black');
+    $(editedInput).after('<p class="storage_viewer_tooltip" style="font-size:10px">Press Enter to save changes');
     $(editedInput).focus().select();
 }
 
@@ -265,9 +267,17 @@ function saveUpdatedValue(e) {
         }
     }
     $(editedInput).attr('style', VALUE_INPUT_STYLE);
+    $(editedInput).parent().find('.storage_viewer_tooltip').remove();
     $('#Refresh').click();
 }
 
+function injectBalloons() {
+    var path = chrome.extension.getURL('balloon.min.css');
+    $('head').append($('<link>')
+        .attr("rel", "stylesheet")
+        .attr("type", "text/css")
+        .attr("href", path));
+}
 //do not remove as it caould be useful in the future
 // function refreshSavedOptionsAndRefreshOverlay(keyToRemove, keyLocation) {
 //     var savedKeys = [];
