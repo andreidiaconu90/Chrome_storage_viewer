@@ -3,7 +3,7 @@
 
     "name": "Storage viewer",
     "description": "This extension displays desired local/session storage values in the browser window",
-    "version": "1.3",
+    "version": "1.4",
     "author": "Andrei Diaconu",
 
     "browser_action": {
@@ -37,7 +37,8 @@
         "Delete-15.png",
         "Edit-15.png",
         "style.css",
-        "styles/jquery.json-viewer.css"
+        "styles/jquery.json-viewer.css",
+        "styles/storage-viewer.css"
     ],
     "permissions": [
         "activeTab",
