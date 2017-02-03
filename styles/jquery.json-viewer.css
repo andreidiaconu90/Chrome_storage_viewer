@@ -8,17 +8,13 @@ ul.json-dict, ol.json-array {
 }
 
 .json-string {
-  color:inherit;
+    color: inherit;
 }
 
-.json-literal {
-}
+.json-literal {}
 
-.json-dict > li,
-.json-string {
-    /*display: block;*/
-    text-overflow: ellipsis;
-    overflow: hidden;
+.json-dict li {
+    word-break: break-word;
 }
 
 
