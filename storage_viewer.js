@@ -15,7 +15,7 @@ const OVERLAY_TABLE_ROW_STYLE = "border-bottom:1pt solid white !important";
 const OVERLAY_TABLE_HEADER_STYLE = "padding:3px 10px 0 10px !important";
 const OVERLAY_REFRESH_BUTTON_STYLE = "width:20px !important;height:20px !important;display:block !important;float: right !important;cursor:pointer !important;";
 const OVERLAY_COPY_BUTTON_STYLE = "width:15px;height:15px;display:block;cursor:pointer;";
-const VALUE_INPUT_STYLE = "background:none;border:none;width: 100%;color:white !important;font-family:Helvetica !important;";
+const VALUE_INPUT_STYLE = "background:none;border:none;width: 100%;color:white !important;font-family:Helvetica !important;max-width:300px;";
 var selectedType = {
     None: "0",
     LocalStorage: "1",
@@ -71,7 +71,9 @@ function displayOverlay(msg, sender, sendResponse) {
         $("#extensionOverlay").remove();
     }
     $($.parseHTML(extensionOverlay)).appendTo('body');
-    injectBalloons();
+    injectCss('styles/jquery.json-viewer.css');
+    injectCss('styles/storage-viewer.css');
+
     var htmlRows = generateHtmlRows(msg.keysToTrack);
 
     if ((msg.keysToTrack === undefined || msg.keysToTrack.length === 0) && htmlRows === "") {
@@ -91,9 +93,51 @@ function displayOverlay(msg, sender, sendResponse) {
 
         $($.parseHTML(table)).appendTo('#extensionOverlay');
     }
+
+    formatJsonValues();
+
     chrome.storage.local.set({
         'extensionState': "open",
     });
+    return true;
+}
+
+function formatJsonValues() {
+    var elements = $('[id*="inputValue-"]');
+    $.each(elements, function(index, elem) {
+        var elemId = '#' + elem.id,
+            elemValue = elem.value,
+            parentId = elem.parentElement.id,
+            parsedValue = isJson(elemValue) ? JSON.parse(elemValue) : elemValue;
+
+        if (parsedValue !== null) {
+            if (parsedValue.constructor === Array) {
+                parsedValue = toObject(parsedValue);
+            }
+
+            if (parsedValue.constructor === Object) {
+                $('#' + parentId).jsonViewer(parsedValue, {
+                    collapsed: true,
+                    withQuotes: false
+                });
+            }
+        }
+    });
+}
+
+function toObject(arr) {
+    var rv = {};
+    for (var i = 0; i < arr.length; ++i)
+        rv[i] = arr[i];
+    return rv;
+}
+
+function isJson(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
     return true;
 }
 
@@ -105,6 +149,8 @@ Object.byString = function(o, s) {
         var k = a[i];
         if (k in o) {
             o = o[k];
+        } else if (isEmptyString(s)) {
+            return o;
         } else {
             return;
         }
@@ -132,27 +178,36 @@ function showMessage(trigger) {
     }, 1000);
 }
 
+function isEmptyString(s) {
+    return s.replace(/ /g, '') === '';
+}
+
 function generateHtmlRows(keysToTrack) {
-    var htmlRows = "";
+    var htmlRows = "",
+        showButtons = false;
     $.each(keysToTrack, function(index, key) {
         if (key._isJson === true) {
             var jsonValue = "";
             var value = getItemFromStorage(key);
             var path = key._value;
             if (value) {
-                jsonValue = Object.byString(JSON.parse(value), key._value);
+                jsonValue = Object.byString(JSON.parse(value), path);
             } else {
                 jsonValue = "parent is undefined";
             }
-            var keyHtml = "<p class='key' style='margin:0'>" + key._value + "</p>";
-            htmlRows += generateHtml(keyHtml, jsonValue, false, key._type);
+            var keyText = isEmptyString(key._value) ? key._key : key._value,
+                keyHtml = "<p class='key' style='margin:0'>" + keyText + "</p>";
+            showButtons = false;
+            htmlRows += generateHtml(keyHtml, JSON.stringify(jsonValue), showButtons, key._type, index);
         } else {
             var keyHtml = "<p class='key' style='margin:0'>" + key._key + "</p>";
             var valueHtml = getItemFromStorage(key);
             if (key._type === selectedType.Cookie || key._type === selectedType.All) {
-                htmlRows += generateHtml(keyHtml, valueHtml, false, key._type);
+                showButtons = false;
+                htmlRows += generateHtml(keyHtml, valueHtml, showButtons, key._type, index);
             } else {
-                htmlRows += generateHtml(keyHtml, valueHtml, true, key._type);
+                showButtons = true;
+                htmlRows += generateHtml(keyHtml, valueHtml, showButtons, key._type, index);
             }
         }
     });
@@ -185,32 +240,27 @@ function getItemFromStorage(key) {
     return value;
 }
 
-function generateHtml(keyHtml, valueHtml, showDelete, keyLocation) {
-    var copyButtonUrl = chrome.extension.getURL('Copy-15.png');
-    var deleteButtonUrl = chrome.extension.getURL('Delete-15.png');
-    var editButtonUrl = chrome.extension.getURL('Edit-15.png');
-    var html = " " +
-        "<td style='" + OVERLAY_TABLE_HEADER_STYLE + "'>" + keyHtml + "</td><td class='valueCell'style='padding:3px 5px 0 10px'>" +
-        "<input type='text'class='inputValue' style='" + VALUE_INPUT_STYLE + "'; value='" + valueHtml + "'readonly />" +
-        "</td>" +
-        "<td style='padding:0 10px 0 10px'>" +
-        "<div class='editValue' style='" + OVERLAY_COPY_BUTTON_STYLE + "background:url(" + editButtonUrl + ")'></div>" +
-        "</td>" +
-        "<td style='padding:0 10px 0 10px'>" +
-        "<div class='copyToClipboard' style='" + OVERLAY_COPY_BUTTON_STYLE + "background:url(" + copyButtonUrl + ")'></div>" +
-        "</td>" +
-        "<td style='display:none'><p class='keyLocation'>" + keyLocation + "</p></td>";
+function generateHtml(keyHtml, valueHtml, showButtons, keyLocation, index) {
+    var copyButtonUrl = chrome.extension.getURL('Copy-15.png'),
+        deleteButtonUrl = chrome.extension.getURL('Delete-15.png'),
+        editButtonUrl = chrome.extension.getURL('Edit-15.png'),
+        editButtonDiv = showButtons ? getButtonDiv("editValue", editButtonUrl) : "&nbsp;",
+        copyButtonDiv = getButtonDiv("copyToClipboard", copyButtonUrl),
+        deleteButtonDiv = showButtons ? getButtonDiv("removeKey", deleteButtonUrl) : "&nbsp;";
 
-    if (showDelete) {
-        var button = "<td style='padding:0 10px 0 10px'>" +
-            "<div class='removeKey' style='" + OVERLAY_COPY_BUTTON_STYLE + "background:url(" + deleteButtonUrl + ")'></div>" +
-            "</td>";
-        html = button + html;
-    } else {
-        var button = "<td>&nbsp;</td>"
-        html = button + html;
-    }
-    html = "<tr>" + html + "<tr>";
+    var html = "<tr>" +
+        "<td>" + deleteButtonDiv + "</td>" +
+        "<td style='" + OVERLAY_TABLE_HEADER_STYLE + "'>" + keyHtml + "</td><td id='valueHtml-" + index + "' class='valueCell'style='padding:3px 5px 0 10px;max-width:300px;'>" +
+        "<input id='inputValue-" + index + "' type='text'class='inputValue' style='" + VALUE_INPUT_STYLE + "'; value='" + valueHtml + "'readonly/>" +
+        "</td>" +
+        "<td class='table-cell'>" +
+        editButtonDiv +
+        "</td>" +
+        "<td class='table-cell'>" +
+        copyButtonDiv +
+        "</td>" +
+        "<td style='display:none'><p class='keyLocation'>" + keyLocation + "</p></td>" +
+        "<tr>";
     return html;
 }
 
@@ -271,13 +321,19 @@ function saveUpdatedValue(e) {
     $('#Refresh').click();
 }
 
-function injectBalloons() {
-    var path = chrome.extension.getURL('balloon.min.css');
+function injectCss(url) {
+    var path = chrome.extension.getURL(url);
+
     $('head').append($('<link>')
         .attr("rel", "stylesheet")
         .attr("type", "text/css")
         .attr("href", path));
 }
+
+function getButtonDiv(buttonClass, buttonUrl) {
+    return "<div class='" + buttonClass + "' style='" + OVERLAY_COPY_BUTTON_STYLE + "background:url(" + buttonUrl + ")'></div>";
+}
+
 //do not remove as it caould be useful in the future
 // function refreshSavedOptionsAndRefreshOverlay(keyToRemove, keyLocation) {
 //     var savedKeys = [];
