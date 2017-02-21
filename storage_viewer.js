@@ -105,10 +105,10 @@ function displayOverlay(msg, sender, sendResponse) {
 function formatJsonValues() {
     var elements = $('[id*="inputValue-"]');
     $.each(elements, function(index, elem) {
-        var elemId = '#' + elem.id,
-            elemValue = elem.value,
+        var elemValue = elem.value,
             parentId = elem.parentElement.id,
-            parsedValue = isJson(elemValue) ? JSON.parse(elemValue) : elemValue;
+            storedValue = localStorage.getItem(parentId),
+            parsedValue = storedValue != null && isJson(storedValue) ? JSON.parse(storedValue) : elemValue;
 
         if (parsedValue !== null) {
             if (parsedValue.constructor === Array) {
@@ -198,7 +198,7 @@ function generateHtmlRows(keysToTrack) {
             var keyText = isEmptyString(key._value) ? key._key : key._value,
                 keyHtml = "<p class='key' style='margin:0'>" + keyText + "</p>";
             showButtons = false;
-            htmlRows += generateHtml(keyHtml, JSON.stringify(jsonValue), showButtons, key._type, index);
+            htmlRows += generateHtml(keyHtml, jsonValue, showButtons, key._type, index);
         } else {
             var keyHtml = "<p class='key' style='margin:0'>" + key._key + "</p>";
             var valueHtml = getItemFromStorage(key);
@@ -245,12 +245,14 @@ function generateHtml(keyHtml, valueHtml, showButtons, keyLocation, index) {
         deleteButtonUrl = chrome.extension.getURL('Delete-15.png'),
         editButtonUrl = chrome.extension.getURL('Edit-15.png'),
         editButtonDiv = showButtons ? getButtonDiv("editValue", editButtonUrl) : "&nbsp;",
-        copyButtonDiv = getButtonDiv("copyToClipboard", copyButtonUrl),
+        copyButtonDiv = isObject(valueHtml) || isArray(valueHtml) ? "&nbsp;" : getButtonDiv("copyToClipboard", copyButtonUrl) ,
         deleteButtonDiv = showButtons ? getButtonDiv("removeKey", deleteButtonUrl) : "&nbsp;";
+
+    saveOjectsAndArraysToLocalStorage(valueHtml, index);
 
     var html = "<tr>" +
         "<td>" + deleteButtonDiv + "</td>" +
-        "<td style='" + OVERLAY_TABLE_HEADER_STYLE + "'>" + keyHtml + "</td><td id='valueHtml-" + index + "' class='valueCell'style='padding:3px 5px 0 10px;max-width:300px;'>" +
+        "<td style='" + OVERLAY_TABLE_HEADER_STYLE + "'>" + keyHtml + "</td><td id='storage-viewer-value-html-" + index + "' class='valueCell'style='padding:3px 5px 0 10px;max-width:300px;'>" +
         "<input id='inputValue-" + index + "' type='text'class='inputValue' style='" + VALUE_INPUT_STYLE + "'; value='" + valueHtml + "'readonly/>" +
         "</td>" +
         "<td class='table-cell'>" +
@@ -262,6 +264,21 @@ function generateHtml(keyHtml, valueHtml, showButtons, keyLocation, index) {
         "<td style='display:none'><p class='keyLocation'>" + keyLocation + "</p></td>" +
         "<tr>";
     return html;
+}
+
+function saveOjectsAndArraysToLocalStorage(valueHtml, index){
+    if(isObject(valueHtml) || isArray(valueHtml))
+    {
+        localStorage.setItem("storage-viewer-value-html-" + index, JSON.stringify(valueHtml));
+    }
+}
+
+function isObject(value){
+    return value && value.constructor === Object;
+}
+
+function isArray(value){
+    return value && value.constructor === Array;
 }
 
 function removeKey(e) {
