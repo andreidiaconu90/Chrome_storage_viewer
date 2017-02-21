@@ -252,7 +252,7 @@ function generateHtml(keyHtml, valueHtml, showButtons, keyLocation, index) {
 
     var html = "<tr>" +
         "<td>" + deleteButtonDiv + "</td>" +
-        "<td style='" + OVERLAY_TABLE_HEADER_STYLE + "'>" + keyHtml + "</td><td id='valueHtml-" + index + "' class='valueCell'style='padding:3px 5px 0 10px;max-width:300px;'>" +
+        "<td style='" + OVERLAY_TABLE_HEADER_STYLE + "'>" + keyHtml + "</td><td id='storage-viewer-value-html-" + index + "' class='valueCell'style='padding:3px 5px 0 10px;max-width:300px;'>" +
         "<input id='inputValue-" + index + "' type='text'class='inputValue' style='" + VALUE_INPUT_STYLE + "'; value='" + valueHtml + "'readonly/>" +
         "</td>" +
         "<td class='table-cell'>" +
@@ -269,7 +269,7 @@ function generateHtml(keyHtml, valueHtml, showButtons, keyLocation, index) {
 function saveOjectsAndArraysToLocalStorage(valueHtml, index){
     if(isObject(valueHtml) || isArray(valueHtml))
     {
-        localStorage.setItem("valueHtml-" + index, JSON.stringify(valueHtml));
+        localStorage.setItem("storage-viewer-value-html-" + index, JSON.stringify(valueHtml));
     }
 }
 
