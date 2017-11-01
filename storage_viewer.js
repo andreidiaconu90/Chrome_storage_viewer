@@ -8,8 +8,6 @@ var selectedType = {
     All: "4"
 };
 
-
-
 function displayOverlay(msg, sender, sendResponse) {
     var extensionOverlay = EXTENSION_OVERLAY_HTML;
 
@@ -34,9 +32,9 @@ function displayOverlay(msg, sender, sendResponse) {
     } else {
         var refreshButtonUrl = chrome.extension.getURL('Refresh-20.png');
         var table = '<table id="overlayTable"><tr id="overlayTableRow">' +
-            '<th></th>' +
             '<th class="overlayTableHeader">Key</th>' +
             '<th class="overlayTableHeader">Value</th>' +
+            '<th></th>' +
             '<th></th>' +
             '<th style="padding-right:8px !important"><div class="overlayRefreshButton" style="background:url(' + refreshButtonUrl + ');"id="Refresh"></div></th>' +
             '</tr>' + htmlRows +
@@ -148,11 +146,11 @@ function generateHtmlRows(keysToTrack) {
                 jsonValue = "parent is undefined";
             }
             var keyText = isEmptyString(key._value) ? key._key : key._value,
-                keyHtml = "<p class='key' style='margin:0'>" + keyText + "</p>";
+                keyHtml = "<p class='key truncateLength' style='margin:0'>" + keyText + "</p>";
             showButtons = false;
             htmlRows += generateHtml(keyHtml, jsonValue, showButtons, key._type, index);
         } else {
-            var keyHtml = "<p class='key' style='margin:0'>" + key._key + "</p>";
+            var keyHtml = "<p class='key truncateLength' style='margin:0'>" + key._key + "</p>";
             var valueHtml = getItemFromStorage(key);
             if (key._type === selectedType.Cookie || key._type === selectedType.All) {
                 showButtons = false;
@@ -203,13 +201,13 @@ function generateHtml(keyHtml, valueHtml, showButtons, keyLocation, index) {
     saveOjectsAndArraysToLocalStorage(valueHtml, index);
 
     var html = "<tr>" +
-        "<td>" + deleteButtonDiv + "</td>" +
         "<td class='overlayTableHeader'>" + keyHtml + "</td><td id='storage-viewer-value-html-" + index + "' class='valueCell'style='padding:3px 5px 0 10px;max-width:300px;'>" +
         "<input id='inputValue-" + index + "' type='text'class='inputValue' value='" + valueHtml + "'readonly/>" +
         "</td>" +
         "<td class='table-cell'>" +
         editButtonDiv +
         "</td>" +
+        "<td>" + deleteButtonDiv + "</td>" +
         "<td class='table-cell'>" +
         copyButtonDiv +
         "</td>" +

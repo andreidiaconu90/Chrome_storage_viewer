@@ -58,3 +58,10 @@
   font-family:Helvetica !important;
   max-width:300px !important;
 }
+
+.truncateLength{
+  white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 25ch;
+}
